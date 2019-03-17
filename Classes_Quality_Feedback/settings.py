@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'surveys.apps.SurveysConfig',
 ]
 
 MIDDLEWARE = [
@@ -50,11 +51,13 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'Classes_Quality_Feedback.urls'
+dirname=os.path.dirname
+SETTINGS_PATH = os.path.normpath(os.path.dirname(dirname(__file__)))
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(SETTINGS_PATH, 'templates'),],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

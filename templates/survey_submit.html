@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <h1>{{ question.survey.name }}</h1>
+
+
+
+    <form  action="{% url 'survey_submit' question.survey.id %}" method="post">
+    {% csrf_token %}
+        <a>{{ question.text }}</a>
+        <label for="answer">Your name: </label>
+        <input type="text" name="answer" id="choice1">
+    <input type="submit" value="Vote">
+    </form>
+
+</head>
+<body>
+
+</body>
+</html>

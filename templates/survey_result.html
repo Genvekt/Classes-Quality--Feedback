@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+<h1>All answers on questions of survey </h1>
+    {% if submitions %}
+    <ul>
+    {% for item in submitions %}
+        <li>{{ item.question.servey.id}} {{ item.question.text}} {{ item.answer}} </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>There is no such survey.</p>
+{% endif %}
+</head>
+<body>
+
+</body>
+</html>
+
