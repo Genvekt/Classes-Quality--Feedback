@@ -5,7 +5,7 @@
     <title>Title</title>
     <h1>This the list of questions on survey "{{ survey.name }}"</h1>
     {% for question in questions %}
-        <li><a href="{% url 'survey_submit' question.id %}">{{ question.text }}</a></li>
+        <li>{{ question.text }}</li>
     {% endfor %}
 </head>
 <body>

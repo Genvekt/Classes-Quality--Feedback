@@ -22,3 +22,4 @@ class Questions(models.Model):
 class Submissions(models.Model):
     question = models.ForeignKey(Questions, on_delete=models.CASCADE)
     answer = models.CharField(max_length=500)
+    time = models.FloatField()

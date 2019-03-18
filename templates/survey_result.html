@@ -3,13 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-<h1>All answers on questions of survey </h1>
-    {% if submitions %}
-    <ul>
-    {% for item in submitions %}
-        <li>{{ item.question.servey.id}} {{ item.question.text}} {{ item.answer}} </li>
+<h1>All answers on questions of survey "{{ survey.name }}"</h1>
+{% if submitions %}
+    <table style="width:100%">
+      <tr>
+          {% for question in questions %}
+
+        <th>{{ question.text }}</th>
+          {% endfor %}
+      </tr>
+    {% for submition in submitions %}
+      <tr>
+      {% for answer in submition %}
+        <td>{{ answer.answer}}</td>
+      {% endfor %}
+      </tr>
     {% endfor %}
-    </ul>
+    </table>
+
 {% else %}
     <p>There is no such survey.</p>
 {% endif %}

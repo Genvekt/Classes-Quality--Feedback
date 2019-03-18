@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Surveys</title>
+    <h1>Here is the list of all surveys available</h1>
+    {% for survey in surveys %}
+        <li>
+            {{ survey.name }}
+            <button ><a href="{% url 'survey_view' survey.id %}">All quetions</a></button>
+            <button ><a href="{% url 'survey_submit' survey.id %}">Attend</a></button>
+            <button ><a href="{% url 'survey_result' survey.id %}">Results</a></button>
+        </li>
+    {% endfor %}
+</head>
+<body>
+
+</body>
+</html>

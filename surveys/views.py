@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from .forms import Answer
+from .forms import Answer, Survey
+import datetime, time
 
 # Create your views here.
 from django.urls import reverse
@@ -11,7 +12,7 @@ from django.template import loader
 
 def index(request):
     data_create()
-    return HttpResponse("Hello, world. You're at the surveys index:, mane is: ")
+    return HttpResponseRedirect(reverse('survey_list'))
 
 
 def summ(request, a, b):
@@ -20,39 +21,50 @@ def summ(request, a, b):
 
 
 def survey_result(request, id):
+    questions = Questions.objects.filter(survey_id=id).order_by('id')
+    survey = Surveys.objects.get(id=id)
     try:
-        submitions = Submissions.objects.filter(question__survey_id=id)
+
+        submitions_temp = Submissions.objects.filter(question__survey_id=id)
+        times = submitions_temp.order_by().values('time').distinct()
+        for sub_time in times:
+            print(sub_time.get('time'))
+            print("\n")
+        submitions = [Submissions.objects.filter(time=sub_time.get('time')).order_by('question_id') for sub_time in times]
+
     except Submissions.DoesNotExist:
         submitions = None
-    return render(request, 'survey_result.html', {'submitions': submitions})
+    return render(request, 'survey_result.html',{'submitions': submitions, 'questions': questions, 'survey': survey})
 
 
 def survey_submit(request, id):
-    # if this is a POST request we need to process the form data
-    question = Questions.objects.get(id=id)
+    survey = Surveys.objects.get(id=id)
+    questions_temp = Questions.objects.filter(survey_id=id)
+    questions = [[question.id, question.text] for question in questions_temp]
+    form = Survey(request.POST or None, extra=questions)
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form = Answer(request.POST)
-        # check whether it's valid:
+        form = Survey(request.POST, extra=questions)
         if form.is_valid():
-            # process the data in form.cleaned_data as required
-            # ...
-            # redirect to a new URL:
+            for (question_id, answer) in form.extra_answers():
 
-            answer = form.cleaned_data['answer']
-            Submissions.objects.create(question_id=id, answer=answer)
-            return HttpResponseRedirect(reverse('survey_result', args=[question.survey.id]))
+                t = datetime.datetime.now()
+                sub_time = time.mktime(t.timetuple())
+                Submissions.objects.create(question_id=question_id, answer=answer, time=sub_time)
+            return HttpResponseRedirect(reverse('survey_result', args=[id]))
 
-        # if a GET (or any other method) we'll create a blank form
-    else:
-        form = Answer()
-    return render(request, 'survey_submit.html', {'form': form, 'question': question})
+    return render(request, 'survey_submit.html', {'form': form, 'questions': questions, 'survey': survey})
 
 
+
+# view all questions available on some exact survey
 def survey_view(request, id):
     questions = Questions.objects.filter(survey_id=id)
     survey = Surveys.objects.get(id=id)
-    return render(request, 'survay_detail.html', {'questions': questions, 'survey': survey})
+    return render(request, 'survey_detail.html', {'questions': questions, 'survey': survey})
+
+def survey_list(request):
+    surveys = Surveys.objects.all()
+    return render(request, 'survey_list.html', {'surveys': surveys})
 
 
 def data_create():
@@ -63,3 +75,4 @@ def data_create():
 
     Questions.objects.create(text="Tel me your name, please", survey_id=survey.id, answer_type_id=a1.id)
     Questions.objects.create(text="How do you feel?", survey_id=survey.id, answer_type_id=a2.id)
+
