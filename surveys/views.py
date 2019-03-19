@@ -67,7 +67,7 @@ def survey_list(request):
     return render(request, 'survey_list.html', {'surveys': surveys})
 
 
-def data_create():
+def data_create(request):
     a1 = AnswerTypes.objects.create(description='Text field')
     a2 = AnswerTypes.objects.create(description='Range from 1 to 10')
 
@@ -75,4 +75,9 @@ def data_create():
 
     Questions.objects.create(text="Tel me your name, please", survey_id=survey.id, answer_type_id=a1.id)
     Questions.objects.create(text="How do you feel?", survey_id=survey.id, answer_type_id=a2.id)
+    return render(request, 'create_data.html')
+
+
+
+
 
