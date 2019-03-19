@@ -11,7 +11,6 @@ from django.template import loader
 
 
 def index(request):
-    data_create(request)
     return HttpResponseRedirect(reverse('survey_list'))
 
 
