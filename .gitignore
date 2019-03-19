@@ -68,3 +68,5 @@ fabric.properties
 db.sqlite3
 venv/
 *.pyc
+
+.idea/
