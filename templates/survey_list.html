@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Surveys</title>
+{% if surveys %}
     <h1>Here is the list of all surveys available</h1>
     {% for survey in surveys %}
         <li>
@@ -13,8 +14,11 @@
         </li>
     {% endfor %}
 
-
+{% else %}
+<h1>Welcome to feedback app!</h1>
+<p>Unfortunately, there are no surveys yet. To create them, press next button: </p>
     <button><a href="/create_data">Create Data</a></button>
+{% endif %}
 
 </head>
 <body>

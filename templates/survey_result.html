@@ -3,27 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-<h1>All answers on questions of survey "{{ survey.name }}"</h1>
-{% if submitions %}
-    <table style="width:100%">
-      <tr>
-          {% for question in questions %}
 
-        <th>{{ question.text }}</th>
+{% if survey %}
+    <h1>All answers on questions of survey "{{ survey.name }}"</h1>
+    {% if submitions %}
+        <table style="width:100%">
+          <tr>
+              {% for question in questions %}
+
+            <th>{{ question.text }}</th>
+              {% endfor %}
+          </tr>
+        {% for submition in submitions %}
+          <tr>
+          {% for answer in submition %}
+            <td>{{ answer.answer}}</td>
           {% endfor %}
-      </tr>
-    {% for submition in submitions %}
-      <tr>
-      {% for answer in submition %}
-        <td>{{ answer.answer}}</td>
-      {% endfor %}
-      </tr>
-    {% endfor %}
-    </table>
+          </tr>
+        {% endfor %}
+        </table>
 
+    {% else %}
+        <p>There is no submissions on this survey yet.</p>
+    {% endif %}
 {% else %}
-    <p>There is no such survey.</p>
+    <h1>Sorry, here is no such survey.</h1>
 {% endif %}
+<button ><a href="{% url 'survey_list'%}">Back</a></button>
 </head>
 <body>
 

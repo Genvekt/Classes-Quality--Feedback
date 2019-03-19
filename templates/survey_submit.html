@@ -14,8 +14,9 @@
 {#        <a>{{ question.text }}</a>#}
 {#        <label for="answer">Your name: </label>#}
 {#        <input type="text" name="answer" id="choice1">#}
-    <input type="submit" value="Vote">
+    <p> <input type="submit" value="Vote"> <button ><a href="{% url 'survey_list' %}">Back</a></button> </p>
     </form>
+
 
 </head>
 <body>

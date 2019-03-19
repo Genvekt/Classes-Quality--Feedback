@@ -70,10 +70,21 @@ def data_create(request):
     a1 = AnswerTypes.objects.create(description='Text field')
     a2 = AnswerTypes.objects.create(description='Range from 1 to 10')
 
-    survey = Surveys.objects.create(name='First survey ever')
+    survey = Surveys.objects.create(name='Networks - Course feedback')
 
-    Questions.objects.create(text="Tel me your name, please", survey_id=survey.id, answer_type_id=a1.id)
-    Questions.objects.create(text="How do you feel?", survey_id=survey.id, answer_type_id=a2.id)
+    Questions.objects.create(text="Lectures", survey_id=survey.id, answer_type_id=a1.id)
+    Questions.objects.create(text="Tutorials", survey_id=survey.id, answer_type_id=a1.id)
+    Questions.objects.create(text="Labs (please, write name of your TA)", survey_id=survey.id, answer_type_id=a1.id)
+    Questions.objects.create(text="Comments", survey_id=survey.id, answer_type_id=a2.id)
+
+    survey = Surveys.objects.create(name='Physics - Course feedback')
+    Questions.objects.create(text="Do you like lectures? (Yes/No)", survey_id=survey.id, answer_type_id=a1.id)
+    Questions.objects.create(text="If your answer is 'no', how to improve them?", survey_id=survey.id, answer_type_id=a1.id)
+    Questions.objects.create(text="Do you like tutorials? (Yes/No)", survey_id=survey.id, answer_type_id=a1.id)
+    Questions.objects.create(text="If your answer is 'no', how to improve them?", survey_id=survey.id, answer_type_id=a2.id)
+    Questions.objects.create(text="Do you like labs? (Yes/No)", survey_id=survey.id, answer_type_id=a1.id)
+    Questions.objects.create(text="If your answer is 'no', how to improve them?", survey_id=survey.id,
+                             answer_type_id=a1.id)
     return render(request, 'create_data.html')
 
 
