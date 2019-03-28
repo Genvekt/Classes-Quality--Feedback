@@ -3,11 +3,31 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    {% if survey %}
     <h1>This the list of questions on survey "{{ survey.name }}"</h1>
-    {% for question in questions %}
-        <li>{{ question.text }}</li>
-    {% endfor %}
-    <button ><a href="{% url 'survey_list' %}">Back</a></button>
+        {% if questions %}
+              <ol>
+            {% for question in questions %}
+                    <li><p>{{ question.text }} <button ><a href="{% url 'question_delete' s_id=survey.id q_id=question.id %}">Delete</a></button> </p></li>
+            {% endfor %}
+              </ol>
+        {% else %}
+            <p>This survey has no questions yet.</p>
+        {% endif %}
+
+        <form  action="{% url 'survey_detail' survey.id %}" method="post">
+            {% csrf_token %}
+
+            <p>{{ form.as_table}}  <input type="submit" value="Add question"> </p>
+            <p> <button ><a href="{% url 'survey_list' %}">Back</a></button> </p>
+        </form>
+
+    {% else %}
+        <h1>Sorry, such survey does not exists.</h1>
+        <p>Make sure you have used right page address.</p>
+        <button ><a href="{% url 'survey_list' %}">Back</a></button>
+    {% endif %}
+
 </head>
 <body>
 

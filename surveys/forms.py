@@ -2,8 +2,11 @@
 from django import forms
 
 
-class Answer(forms.Form):
-    answer = forms.CharField(label='answer', max_length=100)
+class Question(forms.Form):
+    text = forms.CharField(label='Question text', max_length=100)
+
+    def clean_text(self):
+        return self.cleaned_data.get('text')
 
 
 class Survey(forms.Form):

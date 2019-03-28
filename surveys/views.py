@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from .forms import Answer, Survey
+from .forms import Survey, Question
 import datetime, time
 
 # Create your views here.
@@ -29,11 +29,41 @@ def survey_result(request, id):
         for sub_time in times:
             print(sub_time.get('time'))
             print("\n")
-        submitions = [Submissions.objects.filter(time=sub_time.get('time')).order_by('question_id') for sub_time in times]
+        submitions = [Submissions.objects.filter(time=sub_time.get('time')).order_by('question_id') for sub_time in
+                      times]
 
     except Submissions.DoesNotExist:
         submitions = None
-    return render(request, 'survey_result.html',{'submitions': submitions, 'questions': questions, 'survey': survey})
+    return render(request, 'survey_result.html', {'submitions': submitions, 'questions': questions, 'survey': survey})
+
+
+def survey_create(request):
+    pass
+# TODO Add survey creation operation and redirect to new survey_detail page
+
+
+def question_delete(request,s_id,q_id):
+    Questions.objects.filter(id=q_id).delete()
+    return HttpResponseRedirect(reverse('survey_detail', args=[s_id]))
+
+
+
+def survey_detail(request, id):
+    try:
+        survey = Surveys.objects.get(id=id)
+    except Surveys.DoesNotExist:
+        survey = None
+    form = Question(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            text = form.clean_text()
+            Questions.objects.create(text=text, answer_type_id=1, survey_id=id)
+            questions = Questions.objects.filter(survey_id=id)
+            return HttpResponseRedirect(reverse('survey_detail', args=[id]))
+
+    questions = Questions.objects.filter(survey_id=id)
+
+    return render(request, 'survey_detail.html', {'form': form, 'questions': questions, 'survey': survey})
 
 
 def survey_submit(request, id):
@@ -45,7 +75,6 @@ def survey_submit(request, id):
         form = Survey(request.POST, extra=questions)
         if form.is_valid():
             for (question_id, answer) in form.extra_answers():
-
                 t = datetime.datetime.now()
                 sub_time = time.mktime(t.timetuple())
                 Submissions.objects.create(question_id=question_id, answer=answer, time=sub_time)
@@ -53,13 +82,6 @@ def survey_submit(request, id):
 
     return render(request, 'survey_submit.html', {'form': form, 'questions': questions, 'survey': survey})
 
-
-
-# view all questions available on some exact survey
-def survey_view(request, id):
-    questions = Questions.objects.filter(survey_id=id)
-    survey = Surveys.objects.get(id=id)
-    return render(request, 'survey_detail.html', {'questions': questions, 'survey': survey})
 
 def survey_list(request):
     surveys = Surveys.objects.all()
@@ -79,15 +101,12 @@ def data_create(request):
 
     survey = Surveys.objects.create(name='Physics - Course feedback')
     Questions.objects.create(text="Do you like lectures? (Yes/No)", survey_id=survey.id, answer_type_id=a1.id)
-    Questions.objects.create(text="If your answer is 'no', how to improve them?", survey_id=survey.id, answer_type_id=a1.id)
+    Questions.objects.create(text="If your answer is 'no', how to improve them?", survey_id=survey.id,
+                             answer_type_id=a1.id)
     Questions.objects.create(text="Do you like tutorials? (Yes/No)", survey_id=survey.id, answer_type_id=a1.id)
-    Questions.objects.create(text="If your answer is 'no', how to improve them?", survey_id=survey.id, answer_type_id=a2.id)
+    Questions.objects.create(text="If your answer is 'no', how to improve them?", survey_id=survey.id,
+                             answer_type_id=a2.id)
     Questions.objects.create(text="Do you like labs? (Yes/No)", survey_id=survey.id, answer_type_id=a1.id)
     Questions.objects.create(text="If your answer is 'no', how to improve them?", survey_id=survey.id,
                              answer_type_id=a1.id)
     return render(request, 'create_data.html')
-
-
-
-
-
