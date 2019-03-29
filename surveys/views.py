@@ -39,7 +39,7 @@ def survey_result(request, id):
 
 def survey_create(request):
     pass
-# TODO Add survey creation operation and redirect to new survey_detail page
+# TODO Add survey creation operation with data from form and redirect to new survey_detail page
 
 
 def question_delete(request,s_id,q_id):
