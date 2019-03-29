@@ -34,7 +34,18 @@ def survey_result(request, id):
 
     except Submissions.DoesNotExist:
         submitions = None
-    return render(request, 'survey_result.html', {'submitions': submitions, 'questions': questions, 'survey': survey})
+
+    test = []
+    for submition in submitions:
+        test2 = []
+        for i in range(len(submition)):
+            test2.append({'question': questions[i], 'answer':submition[i]})
+        test.append(test2)
+
+
+
+
+    return render(request, 'survey_result.html', {'submitions': submitions,'test':test, 'questions': questions, 'survey': survey})
 
 
 def survey_create(request):

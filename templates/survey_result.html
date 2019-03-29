@@ -1,38 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Head1</title>
+    <h1 class="font-weight-light">Classes Quality Feedback</h1>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+</head>
 
-{% if survey %}
-    <h1>All answers on questions of survey "{{ survey.name }}"</h1>
-    {% if submitions %}
-        <table style="width:100%">
-          <tr>
-              {% for question in questions %}
 
-            <th>{{ question.text }}</th>
-              {% endfor %}
-          </tr>
-        {% for submition in submitions %}
-          <tr>
-          {% for answer in submition %}
-            <td>{{ answer.answer}}</td>
-          {% endfor %}
-          </tr>
-        {% endfor %}
-        </table>
+<body>
+    {% if survey %}
+    <div class="jumbotron jumbotron-fluid", style="background: inherit">
+        <div class="container">
+            <h2 class="text-center font-weight-normal">All answers on questions of survey "{{ survey.name }}"</h2>
+
+            {% if submitions %}
+
+
+            {% for t in test %}
+                {% for i in t %}
+                            <div class="card">
+                                <div class="card-body">
+                                    {{ i.question.text }}
+                                    <br/>
+                                    {{ i.answer.answer}}
+                                </div>
+                            </div>
+
+                    {% endfor %}
+                {% endfor %}
+            {% else %}
+            <h3 class="text-center font-weight-light">There is no submissions on this survey yet.</h3>
+            {% endif %}
+            <br/>
+            <button type="button" class="btn btn-outline-dark d-block mx-auto"><a href="{% url 'survey_list' %}">Back</a></button>
+        </div>
+    </div>
 
     {% else %}
-        <p>There is no submissions on this survey yet.</p>
+        <div class="jumbotron jumbotron-fluid" style="background: inherit">
+            <div class="container">
+                <h2 class="text-center font-weight-normal">Sorry, here is no such survey.</h2>
+                <button type="button" class="btn btn-outline-dark d-block mx-auto"><a href="{% url 'survey_list' %}">Back</a></button>
+            </div>
+        </div>
     {% endif %}
-{% else %}
-    <h1>Sorry, here is no such survey.</h1>
-{% endif %}
-<button ><a href="{% url 'survey_list'%}">Back</a></button>
-</head>
-<body>
-
 </body>
+
 </html>
 

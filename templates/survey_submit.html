@@ -1,25 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-
-    <h1> {{ survey.name }} </h1>
-
-
-
-    <form  action="{% url 'survey_submit' survey.id %}" method="post">
-    {% csrf_token %}
-        {{ form.as_p }}
-{#        <a>{{ question.text }}</a>#}
-{#        <label for="answer">Your name: </label>#}
-{#        <input type="text" name="answer" id="choice1">#}
-    <p> <input type="submit" value="Vote"> <button ><a href="{% url 'survey_list' %}">Back</a></button> </p>
-    </form>
-
-
+    <title>Head1</title>
+    <h1 class="font-weight-light">Classes Quality Feedback</h1>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
+
+
 <body>
+
+    <div class="jumbotron jumbotron-fluid" style="background: inherit">
+        <div class="container">
+            <h2 class="text-center font-weight-normal">{{ survey.name }}
+                <br/>
+            </h2>
+
+            <form  action="{% url 'survey_submit' survey.id %}" method="post">
+                <div class="text-center">
+
+                {% csrf_token %}
+                {{ form.as_p }}
+            {#        <a>{{ question.text }}</a>#}
+            {#        <label for="answer">Your name: </label>#}
+            {#        <input type="text" name="answer" id="choice1">#}
+            <p> <button type="submit" class="btn btn-outline-dark">Submit</button> <button type="button" class="btn btn-outline-dark"><a href="{% url 'survey_list' %}">Back</a></button> </p>
+                </div>
+            </form>
+          </div>
+    </div>
+
+
 
 </body>
 </html>

@@ -1,27 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Surveys</title>
-{% if surveys %}
-    <h1>Here is the list of all surveys available</h1>
-    {% for survey in surveys %}
-        <li>
-            {{ survey.name }}
-            <button ><a href="{% url 'survey_detail' survey.id %}">Edit</a></button>
-            <button ><a href="{% url 'survey_submit' survey.id %}">Attend</a></button>
-            <button ><a href="{% url 'survey_result' survey.id %}">Results</a></button>
-        </li>
-    {% endfor %}
-
-{% else %}
-<h1>Welcome to feedback app !</h1>
-<p>Unfortunately, there are no surveys yet. To create them, press next button: </p>
-    <button><a href="/create_data">Create Data</a></button>
-{% endif %}
-
+    <title>Head1</title>
+    <h1 class="font-weight-light">Classes Quality Feedback</h1>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
-<body>
 
+<body style="background: white">
+
+    {% if surveys %}
+    <div class="jumbotron" style="background: inherit">
+        <h2 class="text-center font-weight-normal">Welcome!</h2>
+        <h3 class="text-center font-weight-light">Here are all available serveys.</h3>
+
+        <div class="row">
+        {% for survey in surveys %}
+            <div class="col-md-6 col-xl-3">
+            <div class="card" style="background:">
+                <div class="card" style="width: 18rem; height:150px">
+                <div class="card-body">
+                    <h5 class="card-title">{{ survey.name }}</h5>
+                    <button type="button" class="btn btn-outline-dark"><a href="{% url 'survey_detail' survey.id %}">Edit</a></button>
+                    <button type="button" class="btn btn-outline-dark"><a href="{% url 'survey_submit' survey.id %}">Attend</a></button>
+                    <button type="button" class="btn btn-outline-dark"><a href="{% url 'survey_result' survey.id %}">Results</a></button>
+                </div>
+            </div>
+            </div>
+    </div>
+        {% endfor %}
+        </div>
+    </div>
+
+    {% else %}
+     <div class="jumbotron" style="background: inherit">
+        <h2 class="text-center font-weight-normal">Welcome!</h2>
+        <h3 class="text-center font-weight-light">Unfortunately, there are no surveys yet. To create them, press next button:</h3>
+         <button type="button" class="btn btn-outline-dark"><a href="'create_data">Create Data</a></button>
+     </div>
+    {% endif %}
 </body>
+
 </html>

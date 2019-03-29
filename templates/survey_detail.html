@@ -1,35 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
-    {% if survey %}
-    <h1>This the list of questions on survey "{{ survey.name }}"</h1>
-        {% if questions %}
-              <ol>
-            {% for question in questions %}
-                    <li><p>{{ question.text }} <button ><a href="{% url 'question_delete' s_id=survey.id q_id=question.id %}">Delete</a></button> </p></li>
-            {% endfor %}
-              </ol>
-        {% else %}
-            <p>This survey has no questions yet.</p>
-        {% endif %}
+    <title>Head1</title>
+    <h1 class="font-weight-light">Classes Quality Feedback</h1>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
 
-        <form  action="{% url 'survey_detail' survey.id %}" method="post">
+<body>
+    {% if survey %}
+    <div class="jumbotron jumbotron-fluid" style="background: inherit">
+        <div class="container">
+            <h2 class="text-center font-weight-normal">There is the list of questions on survey "{{ survey.name }}"
+                <br/>
+            </h2>
+            {% if questions %}
+                  <dl>
+                {% for question in questions %}
+                        <li ><p class="text-center font-weight-normal">{{ question.text }} <button type="button"
+               class="btn btn-outline-dark p-1"><a href="{% url 'question_delete' s_id=survey.id q_id=question.id %}">Delete</a></button> </p></li>
+                {% endfor %}
+                  </dl>
+            {% else %}
+                <h3 class="text-center font-weight-light">This survey has no questions yet.</h3>
+            {% endif %}
+
+            <form  action="{% url 'survey_detail' survey.id %}" method="post">
+                <div class="text-center">
             {% csrf_token %}
 
-            <p>{{ form.as_table}}  <input type="submit" value="Add question"> </p>
-            <p> <button ><a href="{% url 'survey_list' %}">Back</a></button> </p>
-        </form>
-
+            <p>{{ form.as_table}}  <button type="submit" class="btn btn-outline-dark">Add question</button></p>
+            <p> <button type="button" class="btn btn-outline-dark"><a href="{% url 'survey_list' %}">Back</a></button> </p>
+                </div>
+            </form>
+        </div>
+    </div>
     {% else %}
-        <h1>Sorry, such survey does not exists.</h1>
-        <p>Make sure you have used right page address.</p>
-        <button ><a href="{% url 'survey_list' %}">Back</a></button>
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container">
+                <h2 class="text-center font-weight-normal">Sorry, such survey does not exists</h2>
+                <h3 class="text-center font-weight-light">Make sure you have used right page address.</h3>
+                <button type="button" class="btn btn-outline-dark"><a href="{% url 'survey_list' %}">Back</a></button>
+            </div>
+        </div>
     {% endif %}
-
-</head>
-<body>
-
 </body>
+
 </html>
