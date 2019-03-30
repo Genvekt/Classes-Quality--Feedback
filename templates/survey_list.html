@@ -13,7 +13,7 @@
             <button ><a href="{% url 'survey_result' survey.id %}">Results</a></button>
         </li>
     {% endfor %}
-
+    <button><a href="/results">Results</a></button>
 {% else %}
 <h1>Welcome to feedback app!</h1>
 <p>Unfortunately, there are no surveys yet. To create them, press next button: </p>

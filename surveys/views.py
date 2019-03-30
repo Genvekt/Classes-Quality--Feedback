@@ -47,7 +47,6 @@ def question_delete(request,s_id,q_id):
     return HttpResponseRedirect(reverse('survey_detail', args=[s_id]))
 
 
-
 def survey_detail(request, id):
     try:
         survey = Surveys.objects.get(id=id)
@@ -110,3 +109,8 @@ def data_create(request):
     Questions.objects.create(text="If your answer is 'no', how to improve them?", survey_id=survey.id,
                              answer_type_id=a1.id)
     return render(request, 'create_data.html')
+
+
+def results(request):
+    return render(request, 'results.html')
+
