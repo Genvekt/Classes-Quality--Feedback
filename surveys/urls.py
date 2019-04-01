@@ -12,7 +12,7 @@ urlpatterns = [
     url(r'^(?P<s_id>\d+)/survey_detail/(?P<q_id>\d+)/delete$',  views.question_delete, name='question_delete'),
     url(r'create_data/',  views.data_create, name='create_data'),
     path('survey_list/',  views.survey_list, name='survey_list'),
-    path('results/', views.results, name='results'),
+    url(r'^(?P<id>\d+)/results/$', views.results, name='results'),
     path('', views.index, name='index')
 ]
 

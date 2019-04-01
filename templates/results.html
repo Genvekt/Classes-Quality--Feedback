@@ -4,13 +4,15 @@
     <meta charset="UTF-8">
     <title>Results</title>
 
-     <p><a>ID</a>
-    <input type="text" name="ID" id="survey_id_in"></p>
-    <p>
-     <a>KEY</a>
-    <input type="text" name="Key" id="survey_key_in"></p>
+    <form action="" method="post">
+        {% csrf_token %}
+        <table>
+        <p> <a>KEY</a>
+        <input type="text" name="key" id="survey_key_in"></p>
+        </table>
+        <input type="submit" value="Show" />
+    </form>
 
-    <input type="button" value="Show" id="show_results_btn">
 </head>
 <body>
 

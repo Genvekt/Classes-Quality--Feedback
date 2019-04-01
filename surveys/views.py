@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponseRedirect
-from .forms import Survey, Question
+from .forms import Survey, Question, Key
 import datetime, time
 
 # Create your views here.
@@ -111,6 +111,17 @@ def data_create(request):
     return render(request, 'create_data.html')
 
 
-def results(request):
-    return render(request, 'results.html')
+def results(request, id):
+    if request.method == 'POST':
+        form = Key(request.POST)
+        if form.is_valid():
+            text = form.clean_key()
+            if text == 111:
+                return HttpResponseRedirect(reverse('survey_result', args=[id]))
+            else:
+                return render(request, 'results.html', {'id': id})
+
+    return render(request, 'results.html', {'id': id})
+
+
 

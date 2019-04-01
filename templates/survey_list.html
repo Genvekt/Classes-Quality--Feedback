@@ -11,9 +11,9 @@
             <button ><a href="{% url 'survey_detail' survey.id %}">Edit</a></button>
             <button ><a href="{% url 'survey_submit' survey.id %}">Attend</a></button>
             <button ><a href="{% url 'survey_result' survey.id %}">Results</a></button>
+            <button ><a href="{% url 'results' survey.id %}">Results2</a></button>
         </li>
     {% endfor %}
-    <button><a href="/results">Results</a></button>
 {% else %}
 <h1>Welcome to feedback app!</h1>
 <p>Unfortunately, there are no surveys yet. To create them, press next button: </p>
