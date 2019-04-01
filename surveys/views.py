@@ -3,7 +3,7 @@ from django.http import HttpResponseRedirect
 from .forms import Survey, Question, Key
 import datetime, time
 
-# Create your views here.
+
 from django.urls import reverse
 from django.http import HttpResponse
 from .models import Questions, Surveys, Submissions, AnswerTypes, SurveyKeys
@@ -19,6 +19,7 @@ def summ(request, a, b):
     return HttpResponse("Sum is " + str(c))
 
 
+# view to present all submissions on specified survey
 def survey_result(request, id):
     questions = Questions.objects.filter(survey_id=id).order_by('id')
     survey = Surveys.objects.get(id=id)
@@ -26,9 +27,6 @@ def survey_result(request, id):
 
         submitions_temp = Submissions.objects.filter(question__survey_id=id)
         times = submitions_temp.order_by().values('time').distinct()
-        for sub_time in times:
-            print(sub_time.get('time'))
-            print("\n")
         submitions = [Submissions.objects.filter(time=sub_time.get('time')).order_by('question_id') for sub_time in
                       times]
 
@@ -37,16 +35,19 @@ def survey_result(request, id):
     return render(request, 'survey_result.html', {'submitions': submitions, 'questions': questions, 'survey': survey})
 
 
+# view for new survey constructor
 def survey_create(request):
     pass
 # TODO Add survey creation operation with data from form and redirect to new survey_detail page
 
 
+# view for question deletion
 def question_delete(request,s_id,q_id):
     Questions.objects.filter(id=q_id).delete()
     return HttpResponseRedirect(reverse('survey_detail', args=[s_id]))
 
 
+# view for survey page where survey may be edited
 def survey_detail(request, id):
     try:
         survey = Surveys.objects.get(id=id)
@@ -65,6 +66,7 @@ def survey_detail(request, id):
     return render(request, 'survey_detail.html', {'form': form, 'questions': questions, 'survey': survey})
 
 
+# view for survey page where user may submit answers
 def survey_submit(request, id):
     survey = Surveys.objects.get(id=id)
     questions_temp = Questions.objects.filter(survey_id=id)
@@ -82,11 +84,13 @@ def survey_submit(request, id):
     return render(request, 'survey_submit.html', {'form': form, 'questions': questions, 'survey': survey})
 
 
+# view for page of all surveys
 def survey_list(request):
     surveys = Surveys.objects.all()
     return render(request, 'survey_list.html', {'surveys': surveys})
 
 
+# temp view before survey creation constructor is developed
 def data_create(request):
     a1 = AnswerTypes.objects.create(description='Text field')
     a2 = AnswerTypes.objects.create(description='Range from 1 to 10')
@@ -115,22 +119,20 @@ def data_create(request):
     return render(request, 'create_data.html')
 
 
+#one more view to present all submissions on specified survey
 def results(request, id):
     if request.method == 'POST':
         form = Key(request.POST)
         if form.is_valid():
             k = form.cleaned_data.get('key')
             key = SurveyKeys.objects.get(survey_id=id)
-            if k == key:
+            if int(k) == key.key:
                 questions = Questions.objects.filter(survey_id=id).order_by('id')
                 survey = Surveys.objects.get(id=id)
                 try:
 
                     submitions_temp = Submissions.objects.filter(question__survey_id=id)
                     times = submitions_temp.order_by().values('time').distinct()
-                    for sub_time in times:
-                        print(sub_time.get('time'))
-                        print("\n")
                     submitions = [Submissions.objects.filter(time=sub_time.get('time')).order_by('question_id') for
                                   sub_time in
                                   times]
