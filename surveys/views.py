@@ -6,7 +6,7 @@ import datetime, time
 # Create your views here.
 from django.urls import reverse
 from django.http import HttpResponse
-from .models import Questions, Surveys, Submissions, AnswerTypes
+from .models import Questions, Surveys, Submissions, AnswerTypes, SurveyKeys
 from django.template import loader
 
 
@@ -98,6 +98,8 @@ def data_create(request):
     Questions.objects.create(text="Labs (please, write name of your TA)", survey_id=survey.id, answer_type_id=a1.id)
     Questions.objects.create(text="Comments", survey_id=survey.id, answer_type_id=a2.id)
 
+    SurveyKeys.objects.create(survey_id=survey.id, key='123')
+
     survey = Surveys.objects.create(name='Physics - Course feedback')
     Questions.objects.create(text="Do you like lectures? (Yes/No)", survey_id=survey.id, answer_type_id=a1.id)
     Questions.objects.create(text="If your answer is 'no', how to improve them?", survey_id=survey.id,
@@ -108,6 +110,8 @@ def data_create(request):
     Questions.objects.create(text="Do you like labs? (Yes/No)", survey_id=survey.id, answer_type_id=a1.id)
     Questions.objects.create(text="If your answer is 'no', how to improve them?", survey_id=survey.id,
                              answer_type_id=a1.id)
+
+    SurveyKeys.objects.create(survey_id=survey.id, key='444')
     return render(request, 'create_data.html')
 
 
@@ -115,9 +119,26 @@ def results(request, id):
     if request.method == 'POST':
         form = Key(request.POST)
         if form.is_valid():
-            text = form.clean_key()
-            if text == 111:
-                return HttpResponseRedirect(reverse('survey_result', args=[id]))
+            k = form.cleaned_data.get('key')
+            key = SurveyKeys.objects.get(survey_id=id)
+            if k == key:
+                questions = Questions.objects.filter(survey_id=id).order_by('id')
+                survey = Surveys.objects.get(id=id)
+                try:
+
+                    submitions_temp = Submissions.objects.filter(question__survey_id=id)
+                    times = submitions_temp.order_by().values('time').distinct()
+                    for sub_time in times:
+                        print(sub_time.get('time'))
+                        print("\n")
+                    submitions = [Submissions.objects.filter(time=sub_time.get('time')).order_by('question_id') for
+                                  sub_time in
+                                  times]
+
+                except Submissions.DoesNotExist:
+                    submitions = None
+                return render(request, 'survey_result.html',
+                              {'submitions': submitions, 'questions': questions, 'survey': survey})
             else:
                 return render(request, 'results.html', {'id': id})
 

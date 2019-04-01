@@ -24,8 +24,7 @@ class Survey(forms.Form):
 
 
 class Key(forms.Form):
-    text = forms.CharField(label='test', max_length=100)
+    key = forms.CharField()
 
-    def clean_key(self):
-        return self.cleaned_data.get('key')
+
 
