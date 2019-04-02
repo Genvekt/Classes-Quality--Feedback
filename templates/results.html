@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Head1</title>
+    <h3 class="font-weight-light" style="font-family:monospace; text-decoration: underline; margin: 25px 0px 0px 15px">Classes Quality Feedback</h3>
+    {% load staticfiles %}
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="jumbotron" style="background: inherit">
+        <h3 class="text-center font-weight-light" style="font-family:monospace;">Please, enter the key.<br/><br/></h3>
+        <form action="" method="post" style="font-family:monospace; font-size: 17px; margin:0 0 0 475px;">
+        {% csrf_token %}
+        <table>
+        <p> <a>KEY</a>
+        <input type="text" name="key"></p>
+        </table>
+        <p> <button type="submit" class="btn btn-outline-dark">Show</button> <button type="button" class="btn btn-outline-dark"><a href="{% url 'survey_list' %}">Back</a></button> </p>
+        </form>
+
+
+    </div>
+
+</body>
+</html>

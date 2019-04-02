@@ -21,3 +21,10 @@ class Survey(forms.Form):
         for name, value in self.cleaned_data.items():
             if name.startswith('custom_'):
                 yield (int(name[7:]), value)
+
+
+class Key(forms.Form):
+    key = forms.CharField()
+
+
+
