@@ -19,21 +19,21 @@ def summ(request, a, b):
     return HttpResponse("Sum is " + str(c))
 
 
-# view to present all submissions on specified survey
-def survey_result(request, id):
-    questions = Questions.objects.filter(survey_id=id).order_by('id')
-    survey = Surveys.objects.get(id=id)
-    try:
-
-        submitions_temp = Submissions.objects.filter(question__survey_id=id)
-        times = submitions_temp.order_by().values('time').distinct()
-        submitions = [Submissions.objects.filter(time=sub_time.get('time')).order_by('question_id') for sub_time in
-                      times]
-
-    except Submissions.DoesNotExist:
-        submitions = None
-    return render(request, 'survey_result.html', {'submitions': submitions, 'questions': questions, 'survey': survey})
-
+# # view to present all submissions on specified survey
+# def survey_result(request, id):
+#     questions = Questions.objects.filter(survey_id=id).order_by('id')
+#     survey = Surveys.objects.get(id=id)
+#     try:
+#
+#         submitions_temp = Submissions.objects.filter(question__survey_id=id)
+#         times = submitions_temp.order_by().values('time').distinct()
+#         submitions = [Submissions.objects.filter(time=sub_time.get('time')).order_by('question_id') for sub_time in
+#                       times]
+#
+#     except Submissions.DoesNotExist:
+#         submitions = None
+#     return render(request, 'survey_result.html', {'submitions': submitions, 'questions': questions, 'survey': survey})
+#
 
 # view for new survey constructor
 def survey_create(request):
