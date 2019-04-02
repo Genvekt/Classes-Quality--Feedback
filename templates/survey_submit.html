@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Head1</title>
-    <h1 class="font-weight-light">Classes Quality Feedback</h1>
+    <h3 class="font-weight-light" style="font-family:monospace; text-decoration: underline; margin: 25px 0px 0px 15px">Classes Quality Feedback</h3>
     {% load staticfiles %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -15,16 +15,16 @@
 
     <div class="jumbotron jumbotron-fluid" style="background: inherit">
         <div class="container">
-            <h2 class="text-center font-weight-normal">{{ survey.name }}
-                <br/>
+            <h2 class="text-center font-weight-normal" style="font-family:monospace; font-size: 30px">{{ survey.name }}
+                <br/><br/>
             </h2>
 
-            <form  action="{% url 'survey_submit' survey.id %}" method="post">
+            <form  action="{% url 'survey_submit' survey.id %}" method="post" style="font-family:monospace; font-size: 17px;">
                 <div class="text-center">
 
                 {% csrf_token %}
                 {{ form.as_p }}
-            {#        <a>{{ question.text }}</a>#}
+            {#        <a >{{ question.text }}</a>#}
             {#        <label for="answer">Your name: </label>#}
             {#        <input type="text" name="answer" id="choice1">#}
             <p> <button type="submit" class="btn btn-outline-dark">Submit</button> <button type="button" class="btn btn-outline-dark"><a href="{% url 'survey_list' %}">Back</a></button> </p>

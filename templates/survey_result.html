@@ -4,11 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <title>Head1</title>
-    <h1 class="font-weight-light">Classes Quality Feedback</h1>
+    <h3 class="font-weight-light" style="font-family:monospace; text-decoration: underline; margin: 25px 0px 0px 15px">Classes Quality Feedback</h3>
     {% load staticfiles %}
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
-          crossorigin="anonymous">
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 
@@ -16,14 +15,16 @@
     {% if survey %}
     <div class="jumbotron jumbotron-fluid", style="background: inherit">
         <div class="container">
-            <h2 class="text-center font-weight-normal">All answers on questions of survey "{{ survey.name }}"</h2>
+            <h2 class="text-center font-weight-normal" style="font-family:monospace;">All answers on questions of survey "{{ survey.name }}"
+            <br/><br/>
+            </h2>
 
             {% if submitions %}
 
 
             {% for t in test %}
                 {% for i in t %}
-                            <div class="card">
+                            <div class="card"  style="font-family:monospace; font-size: 15px">
                                 <div class="card-body">
                                     {{ i.question.text }}
                                     <br/>
@@ -34,18 +35,18 @@
                     {% endfor %}
                 {% endfor %}
             {% else %}
-            <h3 class="text-center font-weight-light">There is no submissions on this survey yet.</h3>
+            <h3 class="text-center font-weight-light" style="font-family:monospace;">There is no submissions on this survey yet.</h3>
             {% endif %}
             <br/>
-            <button type="button" class="btn btn-outline-dark d-block mx-auto"><a href="{% url 'survey_list' %}">Back</a></button>
+            <button type="button" class="btn btn-outline-dark d-block mx-auto" style="font-family:monospace;"><a href="{% url 'survey_list' %}">Back</a></button>
         </div>
     </div>
 
     {% else %}
         <div class="jumbotron jumbotron-fluid" style="background: inherit">
             <div class="container">
-                <h2 class="text-center font-weight-normal">Sorry, here is no such survey.</h2>
-                <button type="button" class="btn btn-outline-dark d-block mx-auto"><a href="{% url 'survey_list' %}">Back</a></button>
+                <h2 class="text-center font-weight-normal" style="font-family:monospace;">Sorry, here is no such survey.</h2>
+                <button type="button" class="btn btn-outline-dark d-block mx-auto" style="font-family:monospace;"><a href="{% url 'survey_list' %}">Back</a></button>
             </div>
         </div>
     {% endif %}
