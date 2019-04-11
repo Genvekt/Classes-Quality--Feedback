@@ -1,5 +1,16 @@
 
 from django import forms
+from django.contrib.auth.forms import UserCreationForm
+from django.db import OperationalError
+
+from .models import USER_TYPES, Courses, User
+
+def get_courses():
+    try:
+        res = [(course.id, course.title) for course in Courses.objects.all()]
+        return res
+    except OperationalError:
+        return []
 
 
 class Question(forms.Form):
@@ -7,6 +18,17 @@ class Question(forms.Form):
 
     def clean_text(self):
         return self.cleaned_data.get('text')
+
+
+class SurveyName(forms.Form):
+    name = forms.CharField(label='Survey name', max_length=100)
+    course = forms.ChoiceField(choices=get_courses())
+
+    def clean_text(self):
+        return self.cleaned_data.get('name')
+
+    def clean_course(self):
+        return  self.cleaned_data.get('course')
 
 
 class Survey(forms.Form):
@@ -27,4 +49,11 @@ class Key(forms.Form):
     key = forms.CharField()
 
 
+class RegistrationForm(UserCreationForm):
+    email = forms.EmailField(max_length=200, help_text='Required')
+    type = forms.ChoiceField(label="User Type", choices=USER_TYPES)
 
+    class Meta:
+        model = User
+        fields = (
+            'username', 'email', 'password1', 'password2', 'first_name', 'last_name')

@@ -1,8 +1,34 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+
+USER_TYPES = (
+        ('a', 'Administrator'),
+        ('p', 'Professor'),
+        ('s', 'Student'),
+    )
+
+
+class User(AbstractUser):
+    type = models.CharField(max_length=1, choices=USER_TYPES, blank=True, default='s')
+
+    class Meta:
+        permissions = (
+            ("manage_users", "Can manage users"),
+            ("add_survey", "Can add survey"),
+            ("delete_survey", "Can delete survey"),
+            ("modify_survey", "Can modify survey"),
+            ("view_survey_result", "Can view survey result"),
+            ("take_survey", "Can answer survey questions")
+        )
+
+
+class Courses(models.Model):
+    title = models.CharField(max_length=100)
 
 
 class Surveys(models.Model):
     name = models.CharField(max_length=200)
+    course = models.ForeignKey(Courses, on_delete=models.CASCADE)
 
 
 # 0 = text field
@@ -26,4 +52,23 @@ class Submissions(models.Model):
 class SurveyKeys(models.Model):
     survey = models.ForeignKey(Surveys, on_delete=models.CASCADE)
     key = models.IntegerField()
+
+
+class StudentGroup(models.Model):
+    name = models.CharField(max_length=50)
+
+
+class CourseAndGroup(models.Model):
+    group = models.ForeignKey(StudentGroup, on_delete=models.CASCADE)
+    course = models.ForeignKey(Courses, on_delete=models.CASCADE)
+
+
+class Student(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    group = models.ForeignKey(StudentGroup, on_delete=models.CASCADE)
+
+
+class Professor(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    course = models.ForeignKey(Courses, on_delete=models.CASCADE)
 

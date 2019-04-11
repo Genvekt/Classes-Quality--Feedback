@@ -34,6 +34,7 @@
             {% csrf_token %}
 
             <p>{{ form.as_table}}  <button type="submit" class="btn btn-outline-dark" style="font-family:monospace;">Add question</button></p>
+                    <p><button type="button" class="btn btn-outline-dark"><a href="{% url 'survey_delete' survey.id %}">Delete Survey</a></button></p>
             <p> <button type="button" class="btn btn-outline-dark"><a href="{% url 'survey_list' %}">Back</a></button> </p>
                 </div>
             </form>

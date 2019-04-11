@@ -1,44 +1,43 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
-from .forms import Survey, Question, Key
+from  django.contrib.auth.hashers import make_password
+from .forms import Survey, Question, Key, SurveyName
 import datetime, time
 
 # Create your views here.
 from django.urls import reverse
 from django.http import HttpResponse
-from .models import Questions, Surveys, Submissions, AnswerTypes, SurveyKeys
+from .models import Questions, Surveys, Submissions, AnswerTypes, SurveyKeys, Courses, User
 from django.template import loader
 
 
 def index(request):
-    return HttpResponseRedirect(reverse('survey_list'))
+    if request.user.is_authenticated:
+        return redirect('survey_list')
+    else:
+        users = User.objects.filter(type='a')
+        return render(request, 'index.html', {'users': users})
 
 
 def summ(request, a, b):
     c = int(a) + int(b)
     return HttpResponse("Sum is " + str(c))
 
-
-# # view to present all submissions on specified survey
-# def survey_result(request, id):
-#     questions = Questions.objects.filter(survey_id=id).order_by('id')
-#     survey = Surveys.objects.get(id=id)
-#     try:
-#
-#         submitions_temp = Submissions.objects.filter(question__survey_id=id)
-#         times = submitions_temp.order_by().values('time').distinct()
-#         submitions = [Submissions.objects.filter(time=sub_time.get('time')).order_by('question_id') for sub_time in
-#                       times]
-#
-#     except Submissions.DoesNotExist:
-#         submitions = None
-#     return render(request, 'survey_result.html', {'submitions': submitions, 'questions': questions, 'survey': survey})
-#
-
-# view for new survey constructor
 def survey_create(request):
-    pass
-# TODO Add survey creation operation with data from form and redirect to new survey_detail page
+    form = SurveyName(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            name = form.clean_text()
+            course = Courses.objects.get(id=form.clean_course())
+            s = Surveys.objects.create(name=name, course=course)
+            return HttpResponseRedirect(reverse('survey_detail', args=[s.id]))
+    return render(request, 'survey_create.html', {'form': form})
+
+
+def survey_delete(request, id):
+    print(id)
+    Surveys.objects.filter(id=id).delete()
+    return HttpResponseRedirect(reverse('survey_list'))
 
 
 # view for question deletion
@@ -86,8 +85,11 @@ def survey_submit(request, id):
 
 # view for page of all surveys
 def survey_list(request):
-    surveys = Surveys.objects.all()
-    return render(request, 'survey_list.html', {'surveys': surveys})
+    if request.user.is_authenticated:
+        surveys = Surveys.objects.all()
+        return render(request, 'survey_list.html', {'surveys': surveys})
+    else:
+        return redirect('index')
 
 
 # temp view before survey creation constructor is developed
@@ -95,8 +97,20 @@ def data_create(request):
     a1 = AnswerTypes.objects.create(description='Text field')
     a2 = AnswerTypes.objects.create(description='Range from 1 to 10')
 
-    survey = Surveys.objects.create(name='Networks - Course feedback')
+    ph = Courses.objects.create(title="Physics")
+    net = Courses.objects.create(title='Networks')
+    survey = Surveys.objects.create(name='Networks - Course feedback', course=net)
 
+    User.objects.create(
+        username='admin',
+        password=make_password('adminpass', salt=None, hasher='default'),
+        email='admin@mail.ru',
+        type ='a',
+        is_active=True,
+        is_staff=True,
+        first_name='Kek',
+        last_name ='Dolgoborodov'
+    )
     Questions.objects.create(text="Lectures", survey_id=survey.id, answer_type_id=a1.id)
     Questions.objects.create(text="Tutorials", survey_id=survey.id, answer_type_id=a1.id)
     Questions.objects.create(text="Labs (please, write name of your TA)", survey_id=survey.id, answer_type_id=a1.id)
@@ -104,7 +118,7 @@ def data_create(request):
 
     SurveyKeys.objects.create(survey_id=survey.id, key='123')
 
-    survey = Surveys.objects.create(name='Physics - Course feedback')
+    survey = Surveys.objects.create(name='Physics - Course feedback', course=ph)
     Questions.objects.create(text="Do you like lectures? (Yes/No)", survey_id=survey.id, answer_type_id=a1.id)
     Questions.objects.create(text="If your answer is 'no', how to improve them?", survey_id=survey.id,
                              answer_type_id=a1.id)
@@ -145,6 +159,4 @@ def results(request, id):
                 return render(request, 'results.html', {'id': id})
 
     return render(request, 'results.html', {'id': id})
-
-
 

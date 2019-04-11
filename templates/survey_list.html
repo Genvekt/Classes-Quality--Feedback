@@ -14,7 +14,7 @@
 
     {% if surveys %}
     <div class="jumbotron" style="background: inherit">
-        <h2 class="text-center font-weight-normal" style="font-family:monospace;">Welcome!</h2>
+        <h2 class="text-center font-weight-normal" style="font-family:monospace;">Welcome, {{ user.username }}!</h2>
         <h3 class="text-center font-weight-light" style="font-family:monospace;">Here are all available serveys.<br/><br/></h3>
 
         <div class="row">
@@ -33,6 +33,9 @@
     </div>
         {% endfor %}
         </div>
+    <div class="text-center">
+        <p><button type="button" class="btn btn-outline-dark" style="font-family:monospace;"><a href="{% url 'survey_create' %}">Add Survey</a></button></p>
+    </div>
     </div>
 
     {% else %}
@@ -42,5 +45,6 @@
          <button type="button" class="btn btn-outline-dark"><a href="'create_data">Create Data</a></button>
      </div>
     {% endif %}
+<a  href="{% url 'logout' %}?next={{ request.path }}">Log out</a>
 </body>
 </html>
