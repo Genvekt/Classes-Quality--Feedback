@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+        <form  action="{% url 'survey_create' %}" method="post">
+            {% csrf_token %}
+
+            <p>{{ form.as_table}}  <input type="submit" value="Enter name"> </p>
+        </form>
+
+</head>
+<body>
+
+</body>
+</html>
