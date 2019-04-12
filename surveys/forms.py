@@ -24,6 +24,12 @@ class Question(forms.Form):
         return self.cleaned_data.get('type')
 
 
+class StudentGroupForm(forms.Form):
+    name = forms.CharField(label='Group name', max_length=100)
+    def clean_text(self):
+        return self.cleaned_data.get('name')
+
+
 class SurveyName(forms.Form):
     name = forms.CharField(label='Survey name', max_length=100)
     course = forms.ChoiceField(choices=get_courses())

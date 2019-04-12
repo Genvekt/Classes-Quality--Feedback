@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import make_password
-from .forms import Survey, Question, SurveyName
+from .forms import Survey, Question, SurveyName, StudentGroupForm
 import datetime, time
 
 # Create your views here.
 from django.urls import reverse
 from django.http import HttpResponse
-from .models import Questions, Surveys, Submissions, Courses, User
+from .models import Questions, Surveys, Submissions, Courses, User, StudentGroup
 from django.template import loader
 
 
@@ -157,13 +157,38 @@ def results(request, id):
 def admin_board(request):
     return render(request, 'administrative/admin_board.html')
 
+
 def courses_list(request):
     return render(request, 'administrative/courses_list.html')
 
 
 def s_groups_list(request):
-    return render(request, 'administrative/s_groups_list.html')
+    groups = StudentGroup.objects.all().order_by('name')
+    form = StudentGroupForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            name = form.clean_text()
+            StudentGroup.objects.create(name=name)
+            return HttpResponseRedirect(reverse('s_groups_list'))
+    return render(request, 'administrative/s_groups_list.html', {'groups': groups, 'form': form})
+
+
+def s_group_delete(request, id):
+    StudentGroup.objects.get(id=id).delete()
+    return HttpResponseRedirect(reverse('s_groups_list'))
+
 
 def new_users_list(request):
     users = User.objects.filter(is_active=False)
     return render(request, 'administrative/new_users_list.html', {'users': users})
+
+
+def activate_user(request, id):
+    user = User.objects.get(id=id)
+    user.is_active = True
+    user.save()
+    return HttpResponseRedirect(reverse('new_users_list'))
+
+def delete_user(request, id):
+    User.objects.get(id=id).delete()
+    return HttpResponseRedirect(reverse('new_users_list'))

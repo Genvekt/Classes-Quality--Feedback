@@ -10,6 +10,9 @@ urlpatterns = [
     url(r'^courses_list$', views.courses_list, name='courses_list'),
     url(r'^student_groups$', views.s_groups_list, name='s_groups_list'),
     url(r'^new_users$', views.new_users_list, name='new_users_list'),
+    url(r'^new_users/(?P<id>\d+)/activate/$', views.activate_user, name='activate_user'),
+    url(r'^new_users/(?P<id>\d+)/delete/$', views.delete_user, name='delete_user'),
+    url(r'^student_groups/(?P<id>\d+)/delete/$', views.s_group_delete, name='s_group_delete'),
 
     url(r'^(?P<id>\d+)/survey_submit/$',  views.check_submitions, name='survey_submit'),
     url(r'^(?P<id>\d+)/survey_detail/$',  views.survey_detail, name='survey_detail'),

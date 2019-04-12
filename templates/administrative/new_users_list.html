@@ -25,6 +25,8 @@
                             <div class="card"  style="font-family:monospace; font-size: 15px">
                                 <div class="card-body">
                                     <b>{{ user.first_name}} {{ user.last_name}}</b>
+                                    <button type="button" class="btn btn-outline-dark" ><a href="{% url 'activate_user' user.id %}">Activate</a></button>
+                                    <button type="button" class="btn btn-outline-dark" ><a href="{% url 'delete_user' user.id %}">Reject</a></button>
                                     <br/>
                                     Email: {{ user.email}}
                                     <br/>
