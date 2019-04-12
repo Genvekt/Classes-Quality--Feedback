@@ -152,3 +152,18 @@ def results(request, id):
         submitions = None
     return render(request, 'survey_result.html',
                   {'submitions': submitions, 'questions': questions, 'survey': survey})
+
+
+def admin_board(request):
+    return render(request, 'administrative/admin_board.html')
+
+def courses_list(request):
+    return render(request, 'administrative/courses_list.html')
+
+
+def s_groups_list(request):
+    return render(request, 'administrative/s_groups_list.html')
+
+def new_users_list(request):
+    users = User.objects.filter(is_active=False)
+    return render(request, 'administrative/new_users_list.html', {'users': users})

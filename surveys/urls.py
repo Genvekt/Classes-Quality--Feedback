@@ -6,6 +6,11 @@ from . import views
 urlpatterns = [
 
     url(r'^(?P<a>\d+)/(?P<b>\d+)/$',  views.summ, name='sum'),
+    url(r'^admin_board/$', views.admin_board, name='admin_board'),
+    url(r'^courses_list$', views.courses_list, name='courses_list'),
+    url(r'^student_groups$', views.s_groups_list, name='s_groups_list'),
+    url(r'^new_users$', views.new_users_list, name='new_users_list'),
+
     url(r'^(?P<id>\d+)/survey_submit/$',  views.check_submitions, name='survey_submit'),
     url(r'^(?P<id>\d+)/survey_detail/$',  views.survey_detail, name='survey_detail'),
     url(r'^(?P<id>\d+)/survey_delete/$', views.survey_delete, name='survey_delete'),
