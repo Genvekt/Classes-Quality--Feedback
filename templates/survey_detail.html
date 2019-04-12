@@ -20,8 +20,9 @@
             {% if questions %}
                   <dl>
                 {% for question in questions %}
-                        <h5 class="text-center font-weight-normal" style="font-family:monospace;">{{ question.text }} <button type="button"
-               class="btn btn-outline-dark p-1"><a href="{% url 'question_delete' s_id=survey.id q_id=question.id %}">Delete</a></button> </h5>
+                        <h5 class="text-center font-weight-normal" style="font-family:monospace;">{{ question.text }} Answer Type: {{ question.answer_type }}
+                            <button type="button" class="btn btn-outline-dark p-1"><a href="{% url 'question_delete' s_id=survey.id q_id=question.id %}">Delete</a></button>
+                        </h5>
                 {% endfor %}
                       <br/>
                   </dl>

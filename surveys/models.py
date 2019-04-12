@@ -7,6 +7,11 @@ USER_TYPES = (
         ('s', 'Student'),
     )
 
+ANSWER_TYPES = (
+    ('t', 'Text'),
+    ('r', 'Range')
+)
+
 
 class User(AbstractUser):
     type = models.CharField(max_length=1, choices=USER_TYPES, blank=True, default='s')
@@ -31,27 +36,17 @@ class Surveys(models.Model):
     course = models.ForeignKey(Courses, on_delete=models.CASCADE)
 
 
-# 0 = text field
-# 1 = range from 1 to 10
-class AnswerTypes(models.Model):
-    description = models.CharField(max_length=100)
-
-
 class Questions(models.Model):
     survey = models.ForeignKey(Surveys, on_delete=models.CASCADE)
-    answer_type = models.ForeignKey(AnswerTypes, on_delete=models.CASCADE)
+    answer_type = models.CharField(max_length=1, choices=ANSWER_TYPES)
     text = models.CharField(max_length=200)
 
 
 class Submissions(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     question = models.ForeignKey(Questions, on_delete=models.CASCADE)
     answer = models.CharField(max_length=500)
     time = models.FloatField()
-
-
-class SurveyKeys(models.Model):
-    survey = models.ForeignKey(Surveys, on_delete=models.CASCADE)
-    key = models.IntegerField()
 
 
 class StudentGroup(models.Model):

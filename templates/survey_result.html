@@ -22,13 +22,14 @@
             {% if submitions %}
 
 
-            {% for t in test %}
-                {% for i in t %}
+            {% for submition, user in submitions %}
+                <h3 class="text-left font-weight-light" style="font-family:monospace;">{{ user.username }}</h3>
+                {% for i in submition %}
                             <div class="card"  style="font-family:monospace; font-size: 15px">
                                 <div class="card-body">
-                                    {{ i.question.text }}
+                                    <b>{{ i.question.text }}</b>
                                     <br/>
-                                    {{ i.answer.answer}}
+                                    {{ i.answer}}
                                 </div>
                             </div>
 
