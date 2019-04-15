@@ -66,4 +66,3 @@ class Student(models.Model):
 class Professor(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     course = models.ForeignKey(Courses, on_delete=models.CASCADE)
-

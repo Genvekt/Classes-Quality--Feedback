@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import make_password
-from .forms import Survey, Question, SurveyName, StudentGroupForm
+from .forms import Survey, Question, SurveyName, StudentGroupForm, Group
 import datetime, time
 
 # Create your views here.
 from django.urls import reverse
 from django.http import HttpResponse
-from .models import Questions, Surveys, Submissions, Courses, User, StudentGroup
+from .models import Questions, Surveys, Submissions, Courses, User, StudentGroup, CourseAndGroup
 from django.template import loader
 
 
@@ -158,8 +158,31 @@ def admin_board(request):
     return render(request, 'administrative/admin_board.html')
 
 
+# Courses
+
 def courses_list(request):
-    return render(request, 'administrative/courses_list.html')
+    course = Courses.objects.all().order_by('title')
+
+    return render(request, 'administrative/courses_list.html', {'courses': course})
+
+
+def course_info(request, id):
+    course = Courses.objects.get(id=id)
+    form = Group(request.POST or None)
+    groups = CourseAndGroup.objects.filter(course=Courses.objects.get(id=id))
+    if request.method == 'POST':
+        if form.is_valid():
+            name = form.clean_text()
+            if len(CourseAndGroup.objects.filter(group=StudentGroup.objects.get(name=name),
+                                                 course=Courses.objects.get(id=id))) == 0:
+                CourseAndGroup.objects.create(group=StudentGroup.objects.get(name=name),
+                                              course=Courses.objects.get(id=id))
+            return HttpResponseRedirect(reverse('course_info', args=[id]))
+    return render(request, 'courses/course_info.html', {'course': course, "groups": groups, "form": form})
+
+
+def course_instructors(request, id):
+    return render(request, 'courses/course_instructors_edit.html')
 
 
 def s_groups_list(request):
@@ -188,6 +211,7 @@ def activate_user(request, id):
     user.is_active = True
     user.save()
     return HttpResponseRedirect(reverse('new_users_list'))
+
 
 def delete_user(request, id):
     User.objects.get(id=id).delete()

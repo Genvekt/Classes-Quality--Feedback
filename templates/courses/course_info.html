@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{course.title}}</title>
+</head>
+<body>
+    <p>Welcome to {{course.title}}</p>
+    <H3> Groups: </H3>
+    {% if groups %}
+        {% for group in groups %}
+            <div class="card"  style="font-family:monospace; font-size: 15px">
+                <div class="card-body">
+                    <b>{{group.group.name}}</b>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <form  action="{% url 'course_info' course.id%}" method="post">
+        <div class="text-center">
+            {% csrf_token %}
+            <p>{{ form.as_table}}  <button type="submit" class="btn btn-outline-dark" style="font-family:monospace;">Add group</button></p>
+        </div>
+    </form>
+
+    <p><a href="{% url 'course_instructors' course.id %}">Edit Instructors</a> </p>
+    <p><a href="{% url 'admin_board' %}">Main page</a> </p>
+</body>
+</html>

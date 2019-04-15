@@ -5,6 +5,15 @@
     <title>Title</title>
 
     <h1> There will be the list of all Courses</h1>
+    {% if courses %}
+        {% for course in courses %}
+            <div class="card"  style="font-family:monospace; font-size: 15px">
+                <div class="card-body">
+                    <b><a href="{% url 'course_info' course.id %}">{{ course.title }}</a></b>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
 </head>
 <body>
 
