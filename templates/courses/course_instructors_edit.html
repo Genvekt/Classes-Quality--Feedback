@@ -5,6 +5,25 @@
     <title>Course Instructors</title>
 </head>
 <body>
+    <p>Welcome to {{course.title}}</p>
+    <H3> Instructors: </H3>
+    {% if instructors %}
+        {% for instructor in instructors %}
+            <div class="card"  style="font-family:monospace; font-size: 15px">
+                <div class="card-body">
+                    <b>{{instructor.user.first_name}} {{instructor.user.last_name}}</b>
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
+    <form  action="{% url 'course_instructors' course.id%}" method="post">
+        <div class="text-center">
+            {% csrf_token %}
+            <p>{{ form.as_table}}  <button type="submit" class="btn btn-outline-dark" style="font-family:monospace;">New Instructor</button></p>
+        </div>
+    </form>
 
+    <p><a href="{% url 'course_info' course.id %}">Back To Course</a> </p>
+    <p><a href="{% url 'admin_board' %}">Main page</a> </p>
 </body>
 </html>

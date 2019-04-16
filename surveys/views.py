@@ -1,13 +1,13 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import make_password
-from .forms import Survey, Question, SurveyName, StudentGroupForm, Group
+from .forms import Survey, Question, SurveyName, StudentGroupForm, Group, UserName
 import datetime, time
 
 # Create your views here.
 from django.urls import reverse
 from django.http import HttpResponse
-from .models import Questions, Surveys, Submissions, Courses, User, StudentGroup, CourseAndGroup
+from .models import Questions, Surveys, Submissions, Courses, User, StudentGroup, CourseAndGroup, Professor
 from django.template import loader
 
 
@@ -182,7 +182,18 @@ def course_info(request, id):
 
 
 def course_instructors(request, id):
-    return render(request, 'courses/course_instructors_edit.html')
+    course = Courses.objects.get(id=id)
+    form = UserName(request.POST or None)
+    prof = Professor.objects.filter(course=Courses.objects.get(id=id))
+    if request.method == 'POST':
+        if form.is_valid():
+            name = form.clean_text()
+            if len(Professor.objects.filter(user=User.objects.get(username=name),
+                                            course=Courses.objects.get(id=id))) == 0:
+                Professor.objects.create(user=User.objects.get(username=name),
+                                         course=Courses.objects.get(id=id))
+            return HttpResponseRedirect(reverse('course_instructors', args=[id]))
+    return render(request, 'courses/course_instructors_edit.html', {'course': course, "instructors": prof, "form": form})
 
 
 def s_groups_list(request):

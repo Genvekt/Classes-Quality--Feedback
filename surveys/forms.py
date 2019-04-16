@@ -24,6 +24,13 @@ class Question(forms.Form):
         return self.cleaned_data.get('type')
 
 
+class UserName(forms.Form):
+    name = forms.CharField(label='Instructor name', max_length=100)
+
+    def clean_text(self):
+        return self.cleaned_data.get("name")
+
+
 class Group(forms.Form):
     name = forms.CharField(label='Group name', max_length=100)
 
