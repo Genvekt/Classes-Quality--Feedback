@@ -1,13 +1,30 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
+from django.core.exceptions import ValidationError
 from django.db import OperationalError
 
-from .models import USER_TYPES, ANSWER_TYPES, Courses, User
+from .models import USER_TYPES, ANSWER_TYPES, Courses, User, Student, Professor, CourseAndGroup, StudentGroup
 
 
 def get_courses():
     try:
         res = [(course.id, course.title) for course in Courses.objects.all()]
+        return res
+    except OperationalError:
+        return []
+
+
+def get_users(type):
+    try:
+        res = [(u.id, u.last_name + ' ' + u.first_name) for u in User.objects.filter(type=type).order_by('last_name')]
+        return res
+    except OperationalError:
+        return []
+
+
+def get_groups():
+    try:
+        res = [(g.id, g.name) for g in StudentGroup.objects.all()]
         return res
     except OperationalError:
         return []
@@ -26,13 +43,6 @@ class Question(forms.Form):
 
 class UserName(forms.Form):
     name = forms.CharField(label='Instructor name', max_length=100)
-
-    def clean_text(self):
-        return self.cleaned_data.get("name")
-
-
-class Group(forms.Form):
-    name = forms.CharField(label='Group name', max_length=100)
 
     def clean_text(self):
         return self.cleaned_data.get("name")
@@ -82,3 +92,61 @@ class RegistrationForm(UserCreationForm):
         model = User
         fields = (
             'username', 'email', 'password1', 'password2', 'first_name', 'last_name')
+
+
+class ChooseStudent(forms.Form):
+    g_id = 0
+    id = forms.ChoiceField(label="Student: ", choices=get_users('s'))
+
+    def __init__(self, *args, **kwargs):
+        self.g_id = kwargs.pop('g_id')
+        super(ChooseStudent, self).__init__(*args, **kwargs)
+        self.fields['id'] = forms.ChoiceField(label="Student: ", choices=get_users('s'))
+
+    def clean_id(self):
+        id = self.cleaned_data.get('id')
+        try:
+            Student.objects.get(user_id=id, group_id=self.g_id)
+            raise ValidationError('This user is already in group')
+        except Student.DoesNotExist:
+            pass
+        return id
+
+
+class ChooseProfessor(forms.Form):
+    id = forms.ChoiceField(label="Professor: ", choices=[])
+    c_id = 0
+
+    def __init__(self, *args, **kwargs):
+        self.c_id = kwargs.pop('c_id')
+        super(ChooseProfessor, self).__init__(*args, **kwargs)
+        self.fields['id'] = forms.ChoiceField(label="Professor: ", choices=get_users('p'))
+
+    def clean_id(self):
+        id = self.cleaned_data.get('id')
+        try:
+            Professor.objects.get(user_id=id, course_id=self.c_id)
+            raise ValidationError('This professor is already assigned to course')
+        except Professor.DoesNotExist:
+            pass
+        return id
+
+
+class ChooseGroup(forms.Form):
+    id = forms.ChoiceField(label="Group ", choices=[])
+    c_id = 0
+
+    def __init__(self, *args, **kwargs):
+        self.c_id = kwargs.pop('c_id')
+        super(ChooseGroup, self).__init__(*args, **kwargs)
+        self.fields['id'] = forms.ChoiceField(label="Group ", choices=get_groups())
+
+    def clean_id(self):
+        id = self.cleaned_data.get('id')
+        try:
+            CourseAndGroup.objects.get(group_id=id, course_id=self.c_id)
+            raise ValidationError('This group is already assigned to course')
+        except CourseAndGroup.DoesNotExist:
+            pass
+        return id
+

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+{#{% load bootstrap %}#}
 <head>
     <meta charset="UTF-8">
     <title>Head1</title>
@@ -11,30 +12,35 @@
 <body>
 <div class="jumbotron jumbotron-fluid" style="background: inherit">
     <div class="container">
-            <h2 class="text-center font-weight-normal" style="font-family:monospace;">The list of all student groups
+    {% if group %}
+            <h2 class="text-center font-weight-normal" style="font-family:monospace;">The list of all students in  {{ group.name }}
                 <br/><br/>
             </h2>
-            {% if groups %}
-                {% for g in groups %}
+            {% if students %}
+                {% for s in students %}
                             <div class="card"  style="font-family:monospace; font-size: 15px">
                                 <div class="card-body">
                                     <p>
-                                        {{ g.name }}
-                                        <button type="button" class="btn btn-outline-dark"><a href="{% url 's_group_info' g.id %}">Edit Group</a></button>
-                                        <button type="button" class="btn btn-outline-dark"><a href="{% url 's_group_delete' g.id %}">Delete Group</a></button>
+                                        {{ s.user.first_name }} {{ s.user.last_name }} ({{ s.user.username }})
                                     </p>
                                 </div>
                             </div>
                 {% endfor %}
             {% else %}
-                <h3 class="text-center font-weight-light" style="font-family:monospace;">There is no student groups yet.</h3>
+                <h3 class="text-center font-weight-light" style="font-family:monospace;">There is no student in {{ group.name }} yet.</h3>
             {% endif %}
-            <form  action="{% url 's_groups_list' %}" method="post">
+            <form  action="{% url 's_group_info' group.id %}" method="post">
                 <div class="text-center">
                     {% csrf_token %}
-                    <p>{{ form.as_table}}  <button type="submit" class="btn btn-outline-dark" style="font-family:monospace;">Add group</button></p>
+                    <p>{{ form }}  <button type="submit" class="btn btn-outline-dark" style="font-family:monospace;">Add Student</button></p>
                 </div>
             </form>
+
+    {% else %}
+        <h2 class="text-center font-weight-normal" style="font-family:monospace;">Sorry, such group does not exists
+                <br/><br/>
+            </h2>
+    {% endif %}
             <br/>
             <button type="button" class="btn btn-outline-dark d-block mx-auto" style="font-family:monospace;"><a href="{% url 'admin_board' %}">Back</a></button>
     </div>

@@ -1,10 +1,10 @@
-from django.db import models
+from django.db import models, OperationalError
 from django.contrib.auth.models import AbstractUser
 
 USER_TYPES = (
         ('a', 'Administrator'),
         ('p', 'Professor'),
-        ('s', 'Student'),
+        ('s', 'Student')
     )
 
 ANSWER_TYPES = (
