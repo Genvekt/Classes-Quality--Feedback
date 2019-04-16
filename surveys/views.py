@@ -173,11 +173,12 @@ def course_info(request, id):
     if request.method == 'POST':
         if form.is_valid():
             name = form.clean_text()
-            if len(CourseAndGroup.objects.filter(group=StudentGroup.objects.get(name=name),
-                                                 course=Courses.objects.get(id=id))) == 0:
-                CourseAndGroup.objects.create(group=StudentGroup.objects.get(name=name),
-                                              course=Courses.objects.get(id=id))
-            return HttpResponseRedirect(reverse('course_info', args=[id]))
+            if len(StudentGroup.objects.filter(name=name)):
+                if len(CourseAndGroup.objects.filter(group=StudentGroup.objects.get(name=name),
+                                                     course=Courses.objects.get(id=id))) == 0:
+                    CourseAndGroup.objects.create(group=StudentGroup.objects.get(name=name),
+                                                  course=Courses.objects.get(id=id))
+                return HttpResponseRedirect(reverse('course_info', args=[id]))
     return render(request, 'courses/course_info.html', {'course': course, "groups": groups, "form": form})
 
 
@@ -188,11 +189,12 @@ def course_instructors(request, id):
     if request.method == 'POST':
         if form.is_valid():
             name = form.clean_text()
-            if len(Professor.objects.filter(user=User.objects.get(username=name),
-                                            course=Courses.objects.get(id=id))) == 0:
-                Professor.objects.create(user=User.objects.get(username=name),
-                                         course=Courses.objects.get(id=id))
-            return HttpResponseRedirect(reverse('course_instructors', args=[id]))
+            if len(User.objects.filter(username=name)) == 0:
+                if len(Professor.objects.filter(user=User.objects.get(username=name),
+                                                course=Courses.objects.get(id=id))) == 0:
+                    Professor.objects.create(user=User.objects.get(username=name),
+                                             course=Courses.objects.get(id=id))
+                return HttpResponseRedirect(reverse('course_instructors', args=[id]))
     return render(request, 'courses/course_instructors_edit.html', {'course': course, "instructors": prof, "form": form})
 
 
