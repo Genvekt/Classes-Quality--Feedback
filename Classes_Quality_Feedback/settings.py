@@ -13,6 +13,8 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import dj_database_url
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
@@ -22,12 +24,16 @@ STATICFILES_DIRS = (
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '@wmr71njw)a_=@nuti)xw20o*7cxh!1fege)+gpxotj)pnjk-0'
+# SECRET_KEY = '@wmr71njw)a_=@nuti)xw20o*7cxh!1fege)+gpxotj)pnjk-0'
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# DEBUG = True
 
 ALLOWED_HOSTS = [".herokuapp.com"]
+
+SECRET_KEY = dj_database_url.config('SECRET_KEY')
+DEBUG = dj_database_url.config('DEBUG', default=True)
 
 
 # Application definition
@@ -81,11 +87,17 @@ WSGI_APPLICATION = 'Classes_Quality_Feedback.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/2.1/ref/settings/#databases
 
+# DATABASES = {
+#      'default': {
+#          'ENGINE': 'django.db.backends.sqlite3',
+#          'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+#      }
+# }
+
 DATABASES = {
-     'default': {
-         'ENGINE': 'django.db.backends.sqlite3',
-         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-     }
+    'default': dj_database_url.config(
+        default=dj_database_url.config('DATABASE_URL')
+    )
 }
 
 
