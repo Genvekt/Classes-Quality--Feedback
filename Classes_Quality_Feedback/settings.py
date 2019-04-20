@@ -24,16 +24,16 @@ STATICFILES_DIRS = (
 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# SECRET_KEY = '@wmr71njw)a_=@nuti)xw20o*7cxh!1fege)+gpxotj)pnjk-0'
+SECRET_KEY = '@wmr71njw)a_=@nuti)xw20o*7cxh!1fege)+gpxotj)pnjk-0'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = True
+DEBUG = True
 
 ALLOWED_HOSTS = [".herokuapp.com"]
 
-SECRET_KEY = dj_database_url.config('SECRET_KEY')
-DEBUG = dj_database_url.config('DEBUG', default=True)
+# SECRET_KEY = dj_database_url.config('SECRET_KEY')
+# DEBUG = dj_database_url.config('DEBUG', default=True)
 
 
 # Application definition
