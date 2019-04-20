@@ -254,3 +254,10 @@ def delete_user(request, id):
     User.objects.get(id=id).delete()
     return HttpResponseRedirect(reverse('new_users_list'))
 
+def users_list(request):
+    professors = User.objects.filter(is_active=True, type='p')
+    students = User.objects.filter(is_active=True, type='s')
+    admins = User.objects.filter(is_active=True, type='a')
+    return render(request, 'administrative/users_list.html', {'professors': professors,
+                                                              'students': students,
+                                                              'admins': admins})

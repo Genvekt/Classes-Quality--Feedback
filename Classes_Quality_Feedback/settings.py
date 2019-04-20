@@ -41,6 +41,8 @@ INSTALLED_APPS = [
     # 'bootstrapform',
 ]
 
+BOT_TOKEN='837147140:AAHqMO8Knfk87fFkaq6eVaU9aypNeadPaWo'
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',

@@ -1,0 +1,1 @@
+web: gunicorn Classes_Quality_Feedback.wsgi --log-file -

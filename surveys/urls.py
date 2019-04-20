@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^new_users/(?P<id>\d+)/delete/$', views.delete_user, name='delete_user'),
     url(r'^student_groups/(?P<id>\d+)/delete/$', views.s_group_delete, name='s_group_delete'),
     url(r'^student_groups/(?P<id>\d+)/$', views.s_group_info, name='s_group_info'),
+    url(r'^users/$', views.users_list, name='users_list'),
 
     url(r'^(?P<id>\d+)/survey_submit/$',  views.check_submitions, name='survey_submit'),
     url(r'^(?P<id>\d+)/survey_detail/$',  views.survey_detail, name='survey_detail'),
