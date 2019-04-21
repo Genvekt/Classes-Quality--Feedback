@@ -16,7 +16,7 @@ def get_courses():
 
 def get_users(type):
     try:
-        res = [(u.id, u.last_name + ' ' + u.first_name) for u in User.objects.filter(type=type).order_by('last_name')]
+        res = [(u.id, u.last_name + ' ' + u.first_name) for u in User.objects.filter(type=type, is_active=True).order_by('last_name')]
         return res
     except OperationalError:
         return []
@@ -50,6 +50,13 @@ class UserName(forms.Form):
 
 class StudentGroupForm(forms.Form):
     name = forms.CharField(label='Group name', max_length=100)
+
+    def clean_text(self):
+        return self.cleaned_data.get('name')
+
+
+class CourseForm(forms.Form):
+    name = forms.CharField(label='Course name', max_length=100)
 
     def clean_text(self):
         return self.cleaned_data.get('name')
