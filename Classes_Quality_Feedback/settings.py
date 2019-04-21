@@ -34,9 +34,9 @@ SECRET_KEY = '@wmr71njw)a_=@nuti)xw20o*7cxh!1fege)+gpxotj)pnjk-0'
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = [".herokuapp.com", "127.0.0.1"]
+ALLOWED_HOSTS = ["*"]
 
 # SECRET_KEY = dj_database_url.config('SECRET_KEY')
 # DEBUG = dj_database_url.config('DEBUG', default=True)
@@ -102,8 +102,11 @@ WSGI_APPLICATION = 'Classes_Quality_Feedback.wsgi.application'
 #      }
 # }
 
-DATABASES = {}
-DATABASES['default'] = dj_database_url.config(conn_max_age=600)
+DATABASES = {
+    'default': dj_database_url.config(
+        default='sqlite:////{0}'.format(os.path.join(BASE_DIR, 'db.sqlite3'))
+    )
+}
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
