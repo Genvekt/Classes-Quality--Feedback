@@ -1,21 +1,36 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+{% include 'base.html' %}
+{% block content %}
+    <div class="jumbotron jumbotron-fluid" style="background: inherit">
+        <div class="container">
+            <h2 class="text-center font-weight-normal" style="font-family:monospace;">The list of all courses
+            <br/><br/>
+            </h2>
 
-    <h1> There will be the list of all Courses</h1>
-    {% if courses %}
-        {% for course in courses %}
-            <div class="card"  style="font-family:monospace; font-size: 15px">
-                <div class="card-body">
-                    <b><a href="{% url 'course_info' course.id %}">{{ course.title }}</a></b>
+            {% if courses %}
+
+
+            {% for c in courses %}
+                            <div class="card"  style="font-family:monospace; font-size: 15px">
+                                <div class="card-body">
+                                    <b>{{ c.title }}</b>
+                                    <button type="button" class="btn btn-outline-dark" ><a href="{% url 'course_info' c.id %}">Student Groups</a></button>
+                                    <button type="button" class="btn btn-outline-dark" ><a href="{% url 'course_instructors' c.id %}">Instructors</a></button>
+                                    <button type="button" onclick="location.href='{% url 'delete_course' c.id %}'" class="btn btn-outline-danger" style="float: right;" >-</button>
+                                    <br/>
+                                </div>
+                            </div>
+                {% endfor %}
+            {% else %}
+            <h3 class="text-center font-weight-light" style="font-family:monospace;">There is no courses yet.</h3>
+            {% endif %}
+            <form  action="{% url 'courses_list' %}" method="post">
+                <div class="text-center">
+                    {% csrf_token %}
+                    <p>{{ form.as_table}}  <button type="submit" class="btn btn-outline-dark" style="font-family:monospace;">Add</button></p>
                 </div>
-            </div>
-        {% endfor %}
-    {% endif %}
-</head>
-<body>
-
-</body>
-</html>
+            </form>
+            <br/>
+            <button type="button" class="btn btn-outline-dark d-block mx-auto" style="font-family:monospace;"><a href="{% url 'survey_list' %}">Back</a></button>
+        </div>
+    </div>
+{% endblock %}
