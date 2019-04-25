@@ -1,13 +1,14 @@
+from django.core.exceptions import ValidationError
 from django.shortcuts import render, redirect
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import make_password
-from .forms import Survey, Question, SurveyName, StudentGroupForm, Group, UserName
+from .forms import *
 import datetime, time
 
 # Create your views here.
 from django.urls import reverse
 from django.http import HttpResponse
-from .models import Questions, Surveys, Submissions, Courses, User, StudentGroup, CourseAndGroup, Professor
+from .models import Questions, Surveys, Submissions, Courses, User, StudentGroup, CourseAndGroup, Professor, Student
 from django.template import loader
 
 
@@ -70,7 +71,7 @@ def survey_detail(request, id):
 # view for survey page where user may submit answers
 def check_submitions(request, id):
     subs = Submissions.objects.filter(question__survey_id=id, user_id=request.user.id)
-    if(subs):
+    if (subs):
         return render(request, 'survey_submitted.html')
     else:
         return survey_submit(request, id)
@@ -154,58 +155,86 @@ def results(request, id):
                   {'submitions': submitions, 'questions': questions, 'survey': survey})
 
 
-def admin_board(request):
-    return render(request, 'administrative/admin_board.html')
-
-
 # Courses
 
 def courses_list(request):
-    course = Courses.objects.all().order_by('title')
+    form = CourseForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            name = form.clean_text()
+            Courses.objects.create(title=name)
+            return HttpResponseRedirect(reverse('courses_list'))
+    courses = Courses.objects.all().order_by('title')
+    return render(request, 'administrative/courses_list.html', {'courses': courses, 'form': form})
 
-    return render(request, 'administrative/courses_list.html', {'courses': course})
+
+def delete_course(request, id):
+    Courses.objects.get(id=id).delete()
+    return HttpResponseRedirect(reverse('courses_list'))
 
 
 def course_info(request, id):
-    course = Courses.objects.get(id=id)
-    form = Group(request.POST or None)
-    groups = CourseAndGroup.objects.filter(course=Courses.objects.get(id=id))
-    if request.method == 'POST':
-        if form.is_valid():
-            name = form.clean_text()
-            if len(StudentGroup.objects.filter(name=name)):
-                if len(CourseAndGroup.objects.filter(group=StudentGroup.objects.get(name=name),
-                                                     course=Courses.objects.get(id=id))) == 0:
-                    CourseAndGroup.objects.create(group=StudentGroup.objects.get(name=name),
-                                                  course=Courses.objects.get(id=id))
-                return HttpResponseRedirect(reverse('course_info', args=[id]))
-    return render(request, 'courses/course_info.html', {'course': course, "groups": groups, "form": form})
+    try:
+        course = Courses.objects.get(id=id)
+        form2 = ChooseGroup(request.POST or None, c_id=course.id)
+
+        if request.method == 'POST':
+            if form2.is_valid():
+                g_id = form2.clean_id()
+                group = StudentGroup.objects.get(id=g_id)
+                CourseAndGroup.objects.create(group=group, course=course)
+    except Courses.DoesNotExist:
+        course = None
+        form2 = None
+        professors = None
+    groups = CourseAndGroup.objects.filter(course_id=id)
+    return render(request, 'courses/course_info.html', {'course': course, "groups": groups, "form": form2})
 
 
 def course_instructors(request, id):
-    course = Courses.objects.get(id=id)
-    form = UserName(request.POST or None)
-    prof = Professor.objects.filter(course=Courses.objects.get(id=id))
-    if request.method == 'POST':
-        if form.is_valid():
-            name = form.clean_text()
-            if len(User.objects.filter(username=name)) == 0:
-                if len(Professor.objects.filter(user=User.objects.get(username=name),
-                                                course=Courses.objects.get(id=id))) == 0:
-                    Professor.objects.create(user=User.objects.get(username=name),
-                                             course=Courses.objects.get(id=id))
+    try:
+        course = Courses.objects.get(id=id)
+        form1 = ChooseProfessor(request.POST or None, c_id=course.id)
+        if request.method == 'POST':
+            if form1.is_valid():
+                p_id = form1.clean_id()
+                user = User.objects.get(id=p_id)
+                Professor.objects.create(user=user, course=course)
                 return HttpResponseRedirect(reverse('course_instructors', args=[id]))
-    return render(request, 'courses/course_instructors_edit.html', {'course': course, "instructors": prof, "form": form})
+        professors = Professor.objects.filter(course_id=id)
+    except Courses.DoesNotExist:
+        course = None
+        form1 = None
+        professors = None
+    return render(request, 'courses/course_instructors_edit.html',
+                  {'course': course, "instructors": professors, "form": form1})
 
+def delete_prof(request, id):
+    p = Professor.objects.get(id=id)
+    c_id = p.course.id
+    p.delete()
+    return HttpResponseRedirect(reverse('course_instructors', args=[c_id]))
+
+def delete_student(request, id):
+    s = Student.objects.get(id=id)
+    g_id = s.group.id
+    s.delete()
+    return HttpResponseRedirect(reverse('s_group_info', args=[g_id]))
+
+def delete_group_from_course(request, id):
+    g = CourseAndGroup.objects.get(id=id)
+    c_id = g.course.id
+    g.delete()
+    return HttpResponseRedirect(reverse('course_info', args=[c_id]))
 
 def s_groups_list(request):
-    groups = StudentGroup.objects.all().order_by('name')
     form = StudentGroupForm(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
             name = form.clean_text()
             StudentGroup.objects.create(name=name)
             return HttpResponseRedirect(reverse('s_groups_list'))
+    groups = StudentGroup.objects.all().order_by('name')
     return render(request, 'administrative/s_groups_list.html', {'groups': groups, 'form': form})
 
 
@@ -214,18 +243,58 @@ def s_group_delete(request, id):
     return HttpResponseRedirect(reverse('s_groups_list'))
 
 
-def new_users_list(request):
-    users = User.objects.filter(is_active=False)
-    return render(request, 'administrative/new_users_list.html', {'users': users})
+def s_group_info(request, id):
+    try:
+        group = StudentGroup.objects.get(id=id)
+        students = Student.objects.filter(group_id=id)
+        form = ChooseStudent(request.POST or None, g_id=group.id)
+        if request.method == 'POST':
+            if form.is_valid():
+                u_id = form.clean_id()
+                user = User.objects.get(id=u_id)
+                Student.objects.create(user=user, group=group)
+                return HttpResponseRedirect(reverse('s_group_info', args=[id]))
+    except StudentGroup.DoesNotExist:
+        group = None
+        students = None
+        form = None
+    return render(request, 'administrative/s_group_info.html', {'group': group, 'students': students, 'form': form})
 
 
 def activate_user(request, id):
     user = User.objects.get(id=id)
     user.is_active = True
     user.save()
-    return HttpResponseRedirect(reverse('new_users_list'))
+    return HttpResponseRedirect(reverse('users_list'))
 
 
 def delete_user(request, id):
     User.objects.get(id=id).delete()
-    return HttpResponseRedirect(reverse('new_users_list'))
+    return HttpResponseRedirect(reverse('users_list'))
+
+
+def users_list(request):
+    professors = User.objects.filter(is_active=True, type='p').order_by('last_name')
+    students = User.objects.filter(is_active=True, type='s').order_by('last_name')
+    admins = User.objects.filter(is_active=True, type='a').order_by('last_name')
+    new_users = User.objects.filter(is_active=False).order_by('last_name')
+    return render(request, 'administrative/users_list.html', {'professors': professors,
+                                                              'students': students,
+                                                              'admins': admins,
+                                                              'new_users': new_users})
+
+
+def add_user(request):
+    if request.method == 'POST':
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            print(form.cleaned_data.get('type'))
+            user.type = form.cleaned_data.get('type')
+            user.is_active = True
+            user.save()
+
+            return HttpResponseRedirect(reverse('users_list'))
+    else:
+        form = RegistrationForm()
+    return render(request, 'administrative/add_user.html', {'form': form})

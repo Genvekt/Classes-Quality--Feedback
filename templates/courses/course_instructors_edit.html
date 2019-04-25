@@ -1,29 +1,42 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Course Instructors</title>
-</head>
-<body>
-    <p>Welcome to {{course.title}}</p>
-    <H3> Instructors: </H3>
-    {% if instructors %}
-        {% for instructor in instructors %}
-            <div class="card"  style="font-family:monospace; font-size: 15px">
-                <div class="card-body">
-                    <b>{{instructor.user.first_name}} {{instructor.user.last_name}}</b>
+{% include 'base.html' %}
+{% block content %}
+<div class="jumbotron jumbotron-fluid" style="background: inherit">
+    <div class="container">
+    {% if course %}
+            <h2 class="text-center font-weight-normal" style="font-family:monospace;">{{ course.title }}: Instructors
+                <br/><br/>
+            </h2>
+            {% if instructors %}
+                {% for i in instructors %}
+                            <div class="card"  style="font-family:monospace; font-size: 15px">
+                                <div class="card-body">
+                                    <b>
+                                        {{ i.user.first_name }} {{ i.user.last_name }}
+                                        <button type="button" onclick="location.href='{% url 'delete_prof' i.id %}'" class="btn btn-outline-danger" style="float: right;" >-</button>
+                                    </b>
+                                    <p>
+                                        {{ i.user.email }}
+                                    </p>
+                                </div>
+                            </div>
+                {% endfor %}
+            {% else %}
+                <h3 class="text-center font-weight-light" style="font-family:monospace;">There is no assigned instructors in {{ course.title }}</h3>
+            {% endif %}
+            <form  action="{% url 'course_instructors' course.id %}" method="post">
+                <div class="text-center">
+                    {% csrf_token %}
+                    <p>{{ form }}  <button type="submit" class="btn btn-outline-dark" style="font-family:monospace;">Add Instructor</button></p>
                 </div>
-            </div>
-        {% endfor %}
-    {% endif %}
-    <form  action="{% url 'course_instructors' course.id%}" method="post">
-        <div class="text-center">
-            {% csrf_token %}
-            <p>{{ form.as_table}}  <button type="submit" class="btn btn-outline-dark" style="font-family:monospace;">New Instructor</button></p>
-        </div>
-    </form>
+            </form>
 
-    <p><a href="{% url 'course_info' course.id %}">Back To Course</a> </p>
-    <p><a href="{% url 'admin_board' %}">Main page</a> </p>
-</body>
-</html>
+    {% else %}
+        <h2 class="text-center font-weight-normal" style="font-family:monospace;">Sorry, such course does not exists
+                <br/><br/>
+            </h2>
+    {% endif %}
+            <br/>
+            <button type="button" class="btn btn-outline-dark d-block mx-auto" style="font-family:monospace;"><a href="{% url 'courses_list' %}">Back to courses</a></button>
+    </div>
+</div>
+{% endblock %}

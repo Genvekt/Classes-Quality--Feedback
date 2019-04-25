@@ -1,12 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+{% include 'base.html' %}
+{% block content %}
     <h1>Data successfully created!</h1>
     <button ><a href="{% url 'survey_list' %}">Back</a></button>
-</head>
-<body>
-
-</body>
-</html>
+{% endblock %}

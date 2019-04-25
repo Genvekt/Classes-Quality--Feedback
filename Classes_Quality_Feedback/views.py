@@ -9,6 +9,8 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
+            print(form.cleaned_data.get('type'))
+            user.type = form.cleaned_data.get('type')
             user.is_active = False
             user.save()
 

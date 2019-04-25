@@ -1,14 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Head1</title>
-    <h3 class="font-weight-light" style="font-family:monospace; text-decoration: underline; margin: 25px 0px 0px 15px">Classes Quality Feedback</h3>
-    {% load staticfiles %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
-<body>
+{% include 'base.html' %}
+{% block content %}
 <div class="jumbotron jumbotron-fluid" style="background: inherit">
     <div class="container">
             <h2 class="text-center font-weight-normal" style="font-family:monospace;">The list of all student groups
@@ -20,6 +11,7 @@
                                 <div class="card-body">
                                     <p>
                                         {{ g.name }}
+                                        <button type="button" class="btn btn-outline-dark"><a href="{% url 's_group_info' g.id %}">Edit Group</a></button>
                                         <button type="button" class="btn btn-outline-dark"><a href="{% url 's_group_delete' g.id %}">Delete Group</a></button>
                                     </p>
                                 </div>
@@ -35,11 +27,7 @@
                 </div>
             </form>
             <br/>
-            <button type="button" class="btn btn-outline-dark d-block mx-auto" style="font-family:monospace;"><a href="{% url 'admin_board' %}">Back</a></button>
+            <button type="button" class="btn btn-outline-dark d-block mx-auto" style="font-family:monospace;"><a href="{% url 'survey_list' %}">Back</a></button>
     </div>
 </div>
-
-
-
-</body>
-</html>
+{% endblock %}
