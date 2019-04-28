@@ -24,24 +24,10 @@ def summ(request, a, b):
     c = int(a) + int(b)
     return HttpResponse("Sum is " + str(c))
 
-def survey_result(request, id):
-    questions = Questions.objects.filter(survey_id=id).order_by('id')
-    survey = Surveys.objects.get(id=id)
-    try:
-
-        submitions_temp = Submissions.objects.filter(question__survey_id=id)
-        times = submitions_temp.order_by().values('time').distinct()
-        for sub_time in times:
-            print(sub_time.get('time'))
-            print("\n")
-        submitions = [Submissions.objects.filter(time=sub_time.get('time')).order_by('question_id') for sub_time in
-                      times]
-
-    except Submissions.DoesNotExist:
-        submitions = None
-    return render(request, 'survey_result.html', {'submitions': submitions, 'questions': questions, 'survey': survey})
 
 def survey_create(request):
+    if not request.user.is_authenticated or request.user.type not in ['a', 'p']:
+            return render(request, 'permission_error.html')
     form = SurveyName(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
@@ -53,18 +39,21 @@ def survey_create(request):
 
 
 def survey_delete(request, id):
-    print(id)
+    if not request.user.is_authenticated or request.user.type not in ['a', 'p']:
+            return render(request, 'permission_error.html')
     Surveys.objects.filter(id=id).delete()
     return HttpResponseRedirect(reverse('survey_list'))
 
 
-
 # view for question deletion
 def question_delete(request, s_id, q_id):
+    if not request.user.is_authenticated or request.user.type not in ['a', 'p']:
+            return render(request, 'permission_error.html')
     Questions.objects.filter(id=q_id).delete()
     return HttpResponseRedirect(reverse('survey_detail', args=[s_id]))
 
 
+# view for survey page where survey may be edited
 def survey_detail(request, id):
     try:
         survey = Surveys.objects.get(id=id)
@@ -84,7 +73,6 @@ def survey_detail(request, id):
     return render(request, 'survey_detail.html', {'form': form, 'questions': questions, 'survey': survey})
 
 
-
 # view for survey page where user may submit answers
 def check_submitions(request, id):
     subs = Submissions.objects.filter(question__survey_id=id, user_id=request.user.id)
@@ -93,7 +81,10 @@ def check_submitions(request, id):
     else:
         return survey_submit(request, id)
 
+
 def survey_submit(request, id):
+    if not request.user.is_authenticated or request.user.type not in ['a', 's']:
+            return render(request, 'permission_error.html')
     survey = Surveys.objects.get(id=id)
     questions_temp = Questions.objects.filter(survey_id=id)
     questions = [[question.id, question.text, question.answer_type] for question in questions_temp]
@@ -110,6 +101,7 @@ def survey_submit(request, id):
     return render(request, 'survey_submit.html', {'form': form, 'questions': questions, 'survey': survey})
 
 
+# view for page of all surveys
 def survey_list(request):
     if request.user.is_authenticated:
         groups = Student.objects.filter(user=request.user)
@@ -130,7 +122,10 @@ def survey_list(request):
         return redirect('index')
 
 
+# temp view before survey creation constructor is developed
 def data_create(request):
+    if not request.user.is_authenticated or request.user.type not in ['a']:
+            return render(request, 'permission_error.html')
     ph = Courses.objects.create(title="Physics")
     net = Courses.objects.create(title='Networks')
     survey = Surveys.objects.create(name='Networks - Course feedback', course=net)
@@ -195,6 +190,8 @@ def courses_list(request):
 
 
 def delete_course(request, id):
+    if not request.user.is_authenticated or request.user.type not in ['a']:
+            return render(request, 'permission_error.html')
     Courses.objects.get(id=id).delete()
     return HttpResponseRedirect(reverse('courses_list'))
 
@@ -236,18 +233,24 @@ def course_instructors(request, id):
                   {'course': course, "instructors": professors, "form": form1})
 
 def delete_prof(request, id):
+    if not request.user.is_authenticated or request.user.type not in ['a']:
+            return render(request, 'permission_error.html')
     p = Professor.objects.get(id=id)
     c_id = p.course.id
     p.delete()
     return HttpResponseRedirect(reverse('course_instructors', args=[c_id]))
 
 def delete_student(request, id):
+    if not request.user.is_authenticated or request.user.type not in ['a']:
+            return render(request, 'permission_error.html')
     s = Student.objects.get(id=id)
     g_id = s.group.id
     s.delete()
     return HttpResponseRedirect(reverse('s_group_info', args=[g_id]))
 
 def delete_group_from_course(request, id):
+    if not request.user.is_authenticated or request.user.type not in ['a']:
+            return render(request, 'permission_error.html')
     g = CourseAndGroup.objects.get(id=id)
     c_id = g.course.id
     g.delete()
@@ -265,8 +268,11 @@ def s_groups_list(request):
 
 
 def s_group_delete(request, id):
+    if not request.user.is_authenticated or request.user.type not in ['a']:
+            return render(request, 'permission_error.html')
     StudentGroup.objects.get(id=id).delete()
     return HttpResponseRedirect(reverse('s_groups_list'))
+
 
 def s_group_info(request, id):
     try:
@@ -287,6 +293,8 @@ def s_group_info(request, id):
 
 
 def activate_user(request, id):
+    if not request.user.is_authenticated or request.user.type not in ['a']:
+            return render(request, 'permission_error.html')
     user = User.objects.get(id=id)
     user.is_active = True
     user.save()
@@ -294,6 +302,8 @@ def activate_user(request, id):
 
 
 def delete_user(request, id):
+    if not request.user.is_authenticated or request.user.type not in ['a']:
+            return render(request, 'permission_error.html')
     User.objects.get(id=id).delete()
     return HttpResponseRedirect(reverse('users_list'))
 
@@ -310,6 +320,8 @@ def users_list(request):
 
 
 def add_user(request):
+    if not request.user.is_authenticated or request.user.type not in ['a']:
+            return render(request, 'permission_error.html')
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
