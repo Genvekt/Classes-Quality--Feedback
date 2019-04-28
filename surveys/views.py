@@ -124,8 +124,6 @@ def survey_list(request):
 
 # temp view before survey creation constructor is developed
 def data_create(request):
-    if not request.user.is_authenticated or request.user.type not in ['a']:
-            return render(request, 'permission_error.html')
     ph = Courses.objects.create(title="Physics")
     net = Courses.objects.create(title='Networks')
     survey = Surveys.objects.create(name='Networks - Course feedback', course=net)
