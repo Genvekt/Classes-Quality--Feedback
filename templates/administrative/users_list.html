@@ -1,0 +1,143 @@
+{% include 'base.html' %}
+{% block content %}
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h3 class="text-center font-weight-light">
+                The list of all users
+                <button type="button" onclick="location.href='{% url 'add_user' %}'" class="btn btn-outline-success" >+</button>
+            </h3>
+        </div>
+    </div>
+
+
+     <div class="card">
+      <div class="card-header">
+        <a class="card-link" data-toggle="collapse" href="#collapseZero">
+          Unactive users
+        </a>
+      </div>
+      <div id="collapseZero" class="collapse" >
+        <div class="card-body">
+        {% if new_users %}
+            {% for user in new_users %}
+                            <div class="card" style="font-size: 15px">
+                                <div class="card-body">
+                                    <b>{{ user.first_name}} {{ user.last_name}}</b>
+                                    <button type="button" onclick="location.href='{% url 'activate_user' user.id %}'" class="btn btn-outline-success" style="float: right;" >Activate</button>
+                                    <button type="button" onclick="location.href='{% url 'delete_user' user.id %}'" class="btn btn-outline-danger" style="float: right;" >Reject</button>
+                                    <br/>
+                                    Email: {{ user.email}}
+                                    <br/>
+                                    Type:
+                                    {% if user.type == 'a' %}
+                                    Administrator
+                                    {% elif user.type == 'p'%}
+                                    Professor
+                                    {% elif user.type == 's'%}
+                                    Student
+                                    {% else %}
+                                    Unknown
+                                    {% endif %}
+                                </div>
+                            </div>
+            {% endfor %}
+        {% else %}
+            <p>There are no new users</p>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="card">
+      <div class="card-header">
+        <a class="card-link" data-toggle="collapse" href="#collapseOne">
+          Administration
+        </a>
+      </div>
+      <div id="collapseOne" class="collapse" >
+        <div class="card-body">
+        {% if admins %}
+            {% for user in admins %}
+                            <div class="card" style="font-size: 15px">
+                                <div class="card-body">
+                                    <b>{{ user.first_name}} {{ user.last_name}}</b>
+                                    <button type="button" onclick="location.href='{% url 'delete_user' user.id %}'" class="btn btn-outline-danger" style="float: right;" >Delete</button>
+                                    <br/>
+                                    Email: {{ user.email}}
+                                    <br/>
+                                </div>
+                            </div>
+            {% endfor %}
+        {% else %}
+            <p>There are no admins</p>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+
+
+
+
+    <div class="card">
+      <div class="card-header">
+        <a class="card-link" data-toggle="collapse" href="#collapseTwo">
+          Professors
+        </a>
+      </div>
+      <div id="collapseTwo" class="collapse" >
+        <div class="card-body">
+        {% if professors %}
+            {% for user in professors %}
+                            <div class="card" style="font-size: 15px">
+                                <div class="card-body">
+                                    <b>{{ user.first_name}} {{ user.last_name}}</b>
+                                    <button type="button" onclick="location.href='{% url 'delete_user' user.id %}'" class="btn btn-outline-danger" style="float: right;">Delete</button>
+                                    <br/>
+                                    Email: {{ user.email}}
+                                    <br/>
+                                </div>
+                            </div>
+            {% endfor %}
+        {% else %}
+            <p>There are no professors</p>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+
+
+    <div class="card">
+      <div class="card-header">
+        <a class="card-link" data-toggle="collapse" href="#collapseThree">
+          Students
+        </a>
+      </div>
+      <div id="collapseThree" class="collapse" >
+        <div class="card-body">
+        {% if students %}
+            {% for user in students %}
+                            <div class="card" style="font-size: 15px">
+                                <div class="card-body">
+                                    <b>{{ user.first_name}} {{ user.last_name}}</b>
+                                    <button type="button" onclick="location.href='{% url 'delete_user' user.id %}'" class="btn btn-outline-danger" style="float: right;"><a>Delete</a></button>
+                                    <br/>
+                                    Email: {{ user.email}}
+                                    <br/>
+                                </div>
+                            </div>
+            {% endfor %}
+        {% else %}
+            <p>There are no students</p>
+        {% endif %}
+        </div>
+      </div>
+    </div>
+
+            <br/>
+
+            <button type="button" class="btn btn-outline-dark d-block mx-auto" onclick="window.location.href='{% url 'survey_list' %}'" ><a>Back</a></button>
+
+
+{% endblock %}
