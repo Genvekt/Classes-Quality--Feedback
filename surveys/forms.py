@@ -30,6 +30,13 @@ def get_groups():
         return []
 
 
+class SurveyName(forms.Form):
+    name = forms.CharField(label='Survey name', max_length=100)
+
+    def clean_text(self):
+        return self.cleaned_data.get('name')
+
+
 class Question(forms.Form):
     text = forms.CharField(label='Question text', max_length=100)
     type = forms.ChoiceField(choices=ANSWER_TYPES)
@@ -89,6 +96,7 @@ class Survey(forms.Form):
         for name, value in self.cleaned_data.items():
             if name.startswith('custom_'):
                 yield (int(name[7:]), value)
+
 
 
 class RegistrationForm(UserCreationForm):
@@ -156,4 +164,3 @@ class ChooseGroup(forms.Form):
         except CourseAndGroup.DoesNotExist:
             pass
         return id
-
