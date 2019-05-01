@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+    <title>Head1</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <style>
+        .jumbotron {
+        margin: 10px 10px 10px 10px;
+        padding: 10px 10px 10px 10px;
+    }
+    </style>
+</head>
+
+<body>
+{% load staticfiles %}
+{% block sidebar %}
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">Classes Quality Feedback</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active row" style="">
+        <a class="nav-link" href="{% url 'register'%}">Register <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="{% url 'login'%}">Log In <span class="sr-only">(current)</span></a>
+        <a class="nav-link" href="#">Add admin and Data <span class="sr-only">(current)</span></a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+    <nav class="navbar navbar-expand-sm bg-light navbar-light">
+
+  <!-- Links -->
+  <ul class="navbar-nav">
+      {% if request.user.is_authenticated %}
+        {% if request.user.type == 'a' %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">Admin board</a>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" href="{% url 'users_list'%}">Users</a>
+                    <a class="dropdown-item" href="{% url 'courses_list' %}">Courses</a>
+                    <a class="dropdown-item" href="{% url 's_groups_list'%}">Student Groups</a>
+                </div>
+            </li>
+        {% endif %}
+        <li class="nav-item">
+          <a class="nav-link" href="{% url 'logout' %}?next={{ request.path }}" style="float: right;" >Log out</a>
+        </li>
+      {% endif %}
+  </ul>
+
+</nav>
+
+
+{% endblock %}
+</body>
+</html>
