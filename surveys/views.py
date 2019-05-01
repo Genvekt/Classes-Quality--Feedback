@@ -106,16 +106,18 @@ def survey_list(request):
     if request.user.is_authenticated:
         groups = Student.objects.filter(user=request.user)
         print(request.user)
-        courses = []
-        for g in groups:
-            c_t = [c.course.id for c in CourseAndGroup.objects.filter(group_id=g.id)]
-            for c in c_t:
-                if c in courses:
-                    pass
-                else:
-                    courses.append(c)
-        print(courses)
-        surveys = Surveys.objects.filter(course_id__in=courses)
+        if request.user.type == 'a':
+            surveys = Surveys.objects.all()
+        else:
+            courses = []
+            for g in groups:
+                c_t = [c.course.id for c in CourseAndGroup.objects.filter(group_id=g.id)]
+                for c in c_t:
+                    if c in courses:
+                        pass
+                    else:
+                        courses.append(c)
+            surveys = Surveys.objects.filter(course_id__in=courses)
 
         return render(request, 'survey_list.html', {'surveys': surveys})
     else:
