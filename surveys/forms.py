@@ -11,8 +11,7 @@ def get_courses():
     #     res = [(course.id, course.title) for course in Courses.objects.all()]
     #     return res
     # except OperationalError:
-    #     return []
-    pass
+        return []
 
 
 def get_users(type):
@@ -20,16 +19,16 @@ def get_users(type):
     #     res = [(u.id, u.last_name + ' ' + u.first_name) for u in User.objects.filter(type=type, is_active=True).order_by('last_name')]
     #     return res
     # except OperationalError:
-    #     return []
-    pass
+        return []
+
 
 def get_groups():
     # try:
     #     res = [(g.id, g.name) for g in StudentGroup.objects.all()]
     #     return res
     # except OperationalError:
-    #     return []
-    pass
+        return []
+
 
 
 class Question(forms.Form):
