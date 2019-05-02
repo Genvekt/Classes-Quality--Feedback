@@ -143,37 +143,72 @@ def survey_list(request):
 
 # temp view before survey creation constructor is developed
 def data_create(request):
-    ph = Courses.objects.create(title="Physics")
+    swp = Courses.objects.create(title="SWP")
     net = Courses.objects.create(title='Networks')
-    survey = Surveys.objects.create(name='Networks - Course feedback', course=net, open=True)
+    survey = Surveys.objects.create(name='Course feedback', course=net, open=True)
 
     User.objects.create(
-        username='admin',
+        username='a.dolgoborodov',
         password=make_password('adminpass', salt=None, hasher='default'),
-        email='admin@mail.ru',
+        email='a.dolgoborodov@innopolis.ru',
         type='a',
         is_active=True,
         is_staff=True,
-        first_name='Kek',
+        first_name='Aleksandr',
         last_name='Dolgoborodov'
     )
-    Questions.objects.create(text="Lectures", survey_id=survey.id, answer_type='r')
-    Questions.objects.create(text="Tutorials", survey_id=survey.id, answer_type='t')
-    Questions.objects.create(text="Labs (please, write name of your TA)", survey_id=survey.id, answer_type='r')
-    Questions.objects.create(text="Comments", survey_id=survey.id, answer_type='r')
 
-    survey = Surveys.objects.create(name='Physics - Course feedback', course=ph, open=True)
-    Questions.objects.create(text="How do you like lectures? ", survey_id=survey.id, answer_type='r')
-    Questions.objects.create(text="How to improve them?", survey_id=survey.id,
-                             answer_type='t')
-    Questions.objects.create(text="How do you like tutorials? ", survey_id=survey.id, answer_type='r')
-    Questions.objects.create(text="How to improve them?", survey_id=survey.id,
-                             answer_type='t')
-    Questions.objects.create(text="How do you like labs? ", survey_id=survey.id, answer_type='r')
-    Questions.objects.create(text="How to improve them?", survey_id=survey.id,
-                             answer_type='t')
+    User.objects.create(
+        username='v.dmitriyev',
+        password=make_password('professor', salt=None, hasher='default'),
+        email='v.dmitriyev@innopolis.ru',
+        type='p',
+        is_active=True,
+        is_staff=False,
+        first_name='Vladislav',
+        last_name='Dmitriyev'
+    )
+
+    User.objects.create(
+        username='e.bobrov',
+        password=make_password('professor', salt=None, hasher='default'),
+        email='e.bobrov@innopolis.ru',
+        type='p',
+        is_active=True,
+        is_staff=False,
+        first_name='Evgenii',
+        last_name='Bobrov'
+    )
+
+    add_students()
+    Questions.objects.create(text="How good are the Lectures?", survey_id=survey.id, answer_type='r')
+    Questions.objects.create(text="How good are the Tutorials?", survey_id=survey.id, answer_type='r')
+    Questions.objects.create(text="how good are the Labs?", survey_id=survey.id, answer_type='r')
+    Questions.objects.create(text="Comments", survey_id=survey.id, answer_type='t')
+
+    survey = Surveys.objects.create(name='BS17-08-3 Project feedback', course=swp, open=True)
+    Questions.objects.create(text="How do you like the whole product? ", survey_id=survey.id, answer_type='r')
+    Questions.objects.create(text="How good is the design?", survey_id=survey.id, answer_type='r')
+    Questions.objects.create(text="How easy is it to be used? ", survey_id=survey.id, answer_type='r')
+    Questions.objects.create(text="Suggest improvements", survey_id=survey.id, answer_type='t')
 
     return render(request, 'create_data.html')
+
+
+def add_students():
+    f = open('names.txt', 'r')
+    for line in f:
+        l = line[:len(line)-1].split(' ')
+        User.objects.create(
+            first_name=l[0],
+            last_name=l[1],
+            email=l[2],
+            username=l[3],
+            password=make_password('student', salt=None, hasher='default'),
+            is_active=True,
+            is_staff=False,
+            type='s',
+        )
 
 
 # one more view to present all submissions on specified survey
@@ -352,3 +387,4 @@ def add_user(request):
     else:
         form = RegistrationForm()
     return render(request, 'administrative/add_user.html', {'form': form})
+
