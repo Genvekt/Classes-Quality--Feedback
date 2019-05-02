@@ -1,20 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <title>Head1</title>
-    <h3 class="font-weight-light" style="font-family:monospace; text-decoration: underline; margin: 25px 0px 0px 15px">Classes Quality Feedback</h3>
-    {% load staticfiles %}
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
-
-<body style="background: white">
+{% extends 'base.html' %}
+{% block content %}
 
     {% if surveys %}
     <div class="jumbotron" style="background: inherit">
-        <h2 class="text-center font-weight-normal" style="font-family:monospace;">Welcome!</h2>
+        <h2 class="text-center font-weight-normal" style="font-family:monospace;">Welcome, {{ user.username }}!</h2>
         <h3 class="text-center font-weight-light" style="font-family:monospace;">Here are all available serveys.<br/><br/></h3>
 
         <div class="row">
@@ -26,22 +15,29 @@
                     <h5 class="card-title" style="font-family:monospace;">{{ survey.name }}</h5>
                     <button type="button" class="btn btn-outline-dark" style="font-family:monospace;"><a href="{% url 'survey_detail' survey.id %}">Edit</a></button>
                     <button type="button" class="btn btn-outline-dark" style="font-family:monospace;"><a href="{% url 'survey_submit' survey.id %}">Attend</a></button>
-                    <button type="button" class="btn btn-outline-dark" style="font-family:monospace;"><a href="{% url 'survey_result' survey.id %}">Results</a></button>
+                    <button type="button" class="btn btn-outline-dark" style="font-family:monospace;"><a href="{% url 'results' survey.id %}">Results</a></button>
                 </div>
             </div>
             </div>
     </div>
         {% endfor %}
         </div>
+    <div class="text-center">
+        <p><button type="button" class="btn btn-outline-dark" style="font-family:monospace;"><a href="{% url 'survey_create' %}">Add Survey</a></button></p>
+    </div>
     </div>
 
     {% else %}
-     <div class="jumbotron" style="background: inherit">
-        <h2 class="text-center font-weight-normal">Welcome!</h2>
-        <h3 class="text-center font-weight-light">Unfortunately, there are no surveys yet. To create them, press next button:</h3>
-         <button type="button" class="btn btn-outline-dark"><a href="'create_data">Create Data</a></button>
+     <div class="jumbotron" style="height: 100vh; ">
+         <div class="container">
+             <div class="justify-content-center">
+                <h2 class="text-center font-weight-normal" style="font-family:monospace;">Welcome!</h2>
+                <h3 class="text-center font-weight-light" style="font-family:monospace;">Unfortunately, there are no surveys yet. <br/>To create them, press the button:</h3>
+                 <div class="row justify-content-center">
+                 <button type="button" class="btn btn-light btn-lg" style="font-family:monospace;"><a href='create_data'>Create Data</a></button>
+                 </div>
+             </div>
+         </div>
      </div>
     {% endif %}
-</body>
-
-</html>
+{% endblock %}
