@@ -72,6 +72,23 @@ def survey_detail(request, id):
 
     return render(request, 'survey_detail.html', {'form': form, 'questions': questions, 'survey': survey})
 
+def survey_open(request, id):
+    try:
+        survey = Surveys.objects.get(id=id)
+        survey.open = True
+        survey.save()
+    except Surveys.DoesNotExist:
+        pass
+    return HttpResponseRedirect(reverse('survey_list'))
+
+def survey_close(request, id):
+    try:
+        survey = Surveys.objects.get(id=id)
+        survey.open = False
+        survey.save()
+    except Surveys.DoesNotExist:
+        pass
+    return HttpResponseRedirect(reverse('survey_list'))
 
 # view for survey page where user may submit answers
 def check_submitions(request, id):
@@ -96,7 +113,7 @@ def survey_submit(request, id):
             for (question_id, answer) in form.extra_answers():
                 sub_time = time.mktime(t.timetuple())
                 Submissions.objects.create(user=request.user, question_id=question_id, answer=answer, time=sub_time)
-            return HttpResponseRedirect(reverse('results', args=[id]))
+            return HttpResponseRedirect(reverse('survey_list'))
 
     return render(request, 'survey_submit.html', {'form': form, 'questions': questions, 'survey': survey})
 
@@ -117,7 +134,7 @@ def survey_list(request):
                         pass
                     else:
                         courses.append(c)
-            surveys = Surveys.objects.filter(course_id__in=courses)
+            surveys = Surveys.objects.filter(course_id__in=courses, open=True).order_by('open')
 
         return render(request, 'survey_list.html', {'surveys': surveys})
     else:
@@ -128,7 +145,7 @@ def survey_list(request):
 def data_create(request):
     ph = Courses.objects.create(title="Physics")
     net = Courses.objects.create(title='Networks')
-    survey = Surveys.objects.create(name='Networks - Course feedback', course=net)
+    survey = Surveys.objects.create(name='Networks - Course feedback', course=net, open=True)
 
     User.objects.create(
         username='admin',
@@ -145,7 +162,7 @@ def data_create(request):
     Questions.objects.create(text="Labs (please, write name of your TA)", survey_id=survey.id, answer_type='r')
     Questions.objects.create(text="Comments", survey_id=survey.id, answer_type='r')
 
-    survey = Surveys.objects.create(name='Physics - Course feedback', course=ph)
+    survey = Surveys.objects.create(name='Physics - Course feedback', course=ph, open=True)
     Questions.objects.create(text="How do you like lectures? ", survey_id=survey.id, answer_type='r')
     Questions.objects.create(text="How to improve them?", survey_id=survey.id,
                              answer_type='t')

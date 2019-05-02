@@ -35,6 +35,7 @@ class Courses(models.Model):
 class Surveys(models.Model):
     name = models.CharField(max_length=200)
     course = models.ForeignKey(Courses, on_delete=models.CASCADE)
+    open = models.BooleanField(default=False)
 
 
 class Questions(models.Model):

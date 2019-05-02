@@ -5,18 +5,22 @@
             <h2 class="text-center font-weight-normal" style="font-family:monospace; font-size: 30px">{{ survey.name }}
                 <br/><br/>
             </h2>
+            {% if survey.open == False %}
+                <p>Survey is closed</p>
+                <p><button type="button" class="btn btn-outline-dark"><a href="{% url 'survey_list' %}">Back</a></button> </p>
+            {% else %}
+                <form  action="{% url 'survey_submit' survey.id %}" method="post" style="font-family:monospace; font-size: 17px;">
+                    <div class="text-center">
 
-            <form  action="{% url 'survey_submit' survey.id %}" method="post" style="font-family:monospace; font-size: 17px;">
-                <div class="text-center">
-
-                {% csrf_token %}
-                {{ form.as_p }}
-            {#        <a >{{ question.text }}</a>#}
-            {#        <label for="answer">Your name: </label>#}
-            {#        <input type="text" name="answer" id="choice1">#}
-            <p> <button type="submit" class="btn btn-outline-dark">Submit</button> <button type="button" class="btn btn-outline-dark"><a href="{% url 'survey_list' %}">Back</a></button> </p>
-                </div>
-            </form>
+                        {% csrf_token %}
+                        {{ form.as_p }}
+                {#        <a >{{ question.text }}</a>#}
+                {#        <label for="answer">Your name: </label>#}
+                {#        <input type="text" name="answer" id="choice1">#}
+                        <p> <button type="submit" class="btn btn-outline-dark">Submit</button> <button type="button" class="btn btn-outline-dark"><a href="{% url 'survey_list' %}">Back</a></button> </p>
+                    </div>
+                </form>
+            {% endif %}
           </div>
     </div>
 {% endblock %}
