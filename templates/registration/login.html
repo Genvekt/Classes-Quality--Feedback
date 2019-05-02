@@ -1,8 +1,12 @@
-{% extends 'base.html' %}
+{% include 'base.html' %}
 {% block content %}
-    <form   method="post">
-            {% csrf_token %}
-
-            <p>{{ form }}  <input type="submit" value="Submit"> </p>
-    </form>
+     <div class="jumbotron" style="height: 100vh;">
+        <div class="container form-group ">
+            <form method="post" class="form-control-lg" style="font-family:monospace; margin-left:300px;">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-light text-center font-weight-normal" style="margin-left: 150px;">Submit</button>
+            </form>
+        </div>
+     </div>
 {% endblock %}
