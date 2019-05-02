@@ -4,30 +4,30 @@ from django.core.exceptions import ValidationError
 from django.db import OperationalError
 
 from .models import USER_TYPES, ANSWER_TYPES, Courses, User, Student, Professor, CourseAndGroup, StudentGroup
-
-
-def get_courses():
-    try:
-        res = [(course.id, course.title) for course in Courses.objects.all()]
-        return res
-    except OperationalError:
-        return []
-
-
-def get_users(type):
-    try:
-        res = [(u.id, u.last_name + ' ' + u.first_name) for u in User.objects.filter(type=type, is_active=True).order_by('last_name')]
-        return res
-    except OperationalError:
-        return []
-
-
-def get_groups():
-    try:
-        res = [(g.id, g.name) for g in StudentGroup.objects.all()]
-        return res
-    except OperationalError:
-        return []
+#
+#
+# def get_courses():
+#     try:
+#         res = [(course.id, course.title) for course in Courses.objects.all()]
+#         return res
+#     except OperationalError:
+#         return []
+#
+#
+# def get_users(type):
+#     try:
+#         res = [(u.id, u.last_name + ' ' + u.first_name) for u in User.objects.filter(type=type, is_active=True).order_by('last_name')]
+#         return res
+#     except OperationalError:
+#         return []
+#
+#
+# def get_groups():
+#     try:
+#         res = [(g.id, g.name) for g in StudentGroup.objects.all()]
+#         return res
+#     except OperationalError:
+#         return []
 
 
 class SurveyName(forms.Form):
