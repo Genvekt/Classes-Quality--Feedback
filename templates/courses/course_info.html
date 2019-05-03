@@ -1,0 +1,39 @@
+{% include 'base.html' %}
+{% block content %}
+<div class="jumbotron jumbotron-fluid" style="background: inherit">
+    <div class="container">
+    {% if course %}
+            <h2 class="text-center font-weight-normal" style="font-family:monospace;">{{ course.title }}: Student groups
+                <br/><br/>
+            </h2>
+            {% if groups %}
+                {% for g in groups %}
+                            <div class="card"  style="font-family:monospace; font-size: 15px">
+                                <div class="card-body">
+                                    <p>
+                                        {{ g.group.name }}
+                                        <button type="button" onclick="location.href='{% url 'delete_g_from_c' g.id %}'" class="btn btn-outline-danger" style="float: right;" >-</button>
+                                    </p>
+                                </div>
+                            </div>
+                {% endfor %}
+            {% else %}
+                <h3 class="text-center font-weight-light" style="font-family:monospace;">There is no assigned groups in {{ course.title }}</h3>
+            {% endif %}
+            <form  action="{% url 'course_info' course.id %}" method="post">
+                <div class="text-center">
+                    {% csrf_token %}
+                    <p>{{ form }}  <button type="submit" class="btn btn-outline-dark" style="font-family:monospace;">Add Group</button></p>
+                </div>
+            </form>
+
+    {% else %}
+        <h2 class="text-center font-weight-normal" style="font-family:monospace;">Sorry, such course does not exists
+                <br/><br/>
+            </h2>
+    {% endif %}
+            <br/>
+            <button type="button" class="btn btn-outline-dark d-block mx-auto" style="font-family:monospace;"><a href="{% url 'courses_list' %}">Back to courses</a></button>
+    </div>
+</div>
+{% endblock %}
