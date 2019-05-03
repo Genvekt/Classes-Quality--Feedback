@@ -1,0 +1,40 @@
+{% include 'base.html' %}
+{% block content %}
+<div class="jumbotron jumbotron-fluid" style="background: inherit">
+    <div class="container">
+    {% if group %}
+            <h2 class="text-center font-weight-normal" style="font-family:monospace;">The list of all students in  {{ group.name }}
+                <br/><br/>
+            </h2>
+            {% if students %}
+                {% for s in students %}
+                            <div class="card"  style="font-family:monospace; font-size: 15px">
+                                <div class="card-body">
+                                    <p>
+                                        {{ s.user.first_name }} {{ s.user.last_name }} ({{ s.user.username }})
+                                        <button type="button" onclick="location.href='{% url 'delete_student' s.id %}'" class="btn btn-outline-danger" style="float: right;" >-</button>
+                                    </p>
+                                </div>
+                            </div>
+                {% endfor %}
+            {% else %}
+                <h3 class="text-center font-weight-light" style="font-family:monospace;">There is no student in {{ group.name }} yet.</h3>
+            {% endif %}
+            <form  action="{% url 's_group_info' group.id %}" method="post">
+                <div class="text-center">
+                    {% csrf_token %}
+                    <p>{{ form }}  <button type="submit" class="btn btn-outline-dark" style="font-family:monospace;">Add Student</button></p>
+                </div>
+            </form>
+
+    {% else %}
+        <h2 class="text-center font-weight-normal" style="font-family:monospace;">Sorry, such group does not exists
+                <br/><br/>
+            </h2>
+    {% endif %}
+            <br/>
+            <button type="button" class="btn btn-outline-dark d-block mx-auto" style="font-family:monospace;"><a href="{% url 's_groups_list' %}">Back</a></button>
+    </div>
+</div>
+
+{% endblock %}
