@@ -1,6 +1,6 @@
 {% include 'base.html' %}
 {% block content %}
-    <div class="jumbotron jumbotron-fluid" style="background: inherit">
+    <div class="jumbotron" style="height: 1000px">
         <div class="container">
             <h2 class="text-center font-weight-normal" style="font-family:monospace; font-size: 30px">{{ survey.name }}
                 <br/><br/>
@@ -14,7 +14,10 @@
             {#        <a >{{ question.text }}</a>#}
             {#        <label for="answer">Your name: </label>#}
             {#        <input type="text" name="answer" id="choice1">#}
-            <p> <button type="submit" class="btn btn-outline-dark">Submit</button> <button type="button" class="btn btn-outline-dark"><a href="{% url 'survey_list' %}">Back</a></button> </p>
+            <p>
+                <button type="submit" class="btn btn-light text-center font-weight-normal" style="margin-left: 400px;">Submit</button>
+                <button type="button" class="btn btn-light text-center font-weight-normal" style="margin-left: 2%;"><a href="{% url 'survey_list' %}">Back</a></button>
+            </p>
                 </div>
             </form>
           </div>
