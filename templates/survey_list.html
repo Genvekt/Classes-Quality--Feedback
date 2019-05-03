@@ -2,56 +2,57 @@
 {% block content %}
 
 
-    <div class="jumbotron" style="background: inherit">
-        <h2 class="text-center font-weight-normal" style="font-family:monospace;">Welcome, {{ user.username }}!</h2>
+    <div class="jumbotron" style="height: 1000px">
+        <h2 class="text-center font-weight-normal" style="font-family:monospace;">Welcome, {{ user.username }}!<br/><br/></h2>
         {% if surveys %}
             <h3 class="text-center font-weight-light" style="font-family:monospace;">Here are all available surveys.<br/><br/></h3>
 
-            <div class="row">
+            <div class="row card-column" style="text-align: center">
             {% for survey in surveys %}
-                <div class="col-md-6 col-xl-3" style="top: 50%; left: 50%; margin-right: -50%;">
-                <div class="card-desk" style="text-align: center">
-                    <div class="card w-100" >
-                    <div class="card-header">{{ survey.name }}</div>
-                    <div class="card-body">
-                        <h5 class="card-title" style="font-family:monospace;">
-                            Course: {{ survey.course.title }}
-                        <br>
-                            Status:
-                            {% if survey.open == False %}
-                                <span class="badge badge-danger">Clossed</span>
-                            {% else %}
-                                <span class="badge badge-success">Open</span>
-                            {% endif %}
-                        </h5>
-                        {% if request.user.type == 's' %}
-                            <button onclick="location.href='{% url 'survey_submit' survey.id %}'" type="button" class="btn btn-outline-dark" style="font-family:monospace;">Attend</button>
-                        {% else %}
-                            {% if survey.open == False %}
-                                <button onclick="location.href='{% url 'survey_open' survey.id %}'" type="button" class="btn btn-outline-dark" style="font-family:monospace;">Open</button>
-                            {% else %}
-                                <button onclick="location.href='{% url 'survey_close' survey.id %}'" type="button" class="btn btn-outline-dark" style="font-family:monospace;">Close</button>
-                            {% endif %}
-                            <button onclick="location.href='{% url 'survey_detail' survey.id %}'" type="button" class="btn btn-outline-dark" style="font-family:monospace;">Edit</button>
-                            <button onclick="location.href='{% url 'results' survey.id %}'" type="button" class="btn btn-outline-dark" style="font-family:monospace;">Results</button>
-                        {% endif %}
+                <div class="col-md-6 col-xl-3">
+                        <div class="card w-100" style="margin-bottom: 10%; margin-left: 10%; margin-right:10%; margin-top: 10%;" >
+                            <div class="card-header">{{ survey.name }}</div>
+                            <div class="card-body">
+                                <h5 class="card-title" style="font-family:monospace;">
+                                    Course: {{ survey.course.title }}
+                                <br>
+                                    Status:
+                                    {% if survey.open == False %}
+                                        <span class="badge badge-danger">Clossed</span>
+                                    {% else %}
+                                        <span class="badge badge-success">Open</span>
+                                    {% endif %}
+                                </h5>
+                                {% if request.user.type == 's' %}
+                                    <button type="button" class="btn btn-light" style="font-family:monospace; margin-right: 10px; float: right;"><a href="{% url 'survey_submit' survey.id %}">Attend</a></button>
+                                {% else %}
+                                    {% if survey.open == False %}
+                                        <button type="button" class="btn btn-light" style="font-family:monospace; margin-right: 10px; float: right;"><a href="{% url 'survey_open' survey.id %}">Open</a></button>
+                                    {% else %}
+                                        <button type="button" class="btn btn-light" style="font-family:monospace; margin-right: 10px; float: right;"><a href="{% url 'survey_close' survey.id %}">Close</a></button>
+                                    {% endif %}
+                                    <button type="button" class="btn btn-light" style="font-family:monospace; margin-right: 10px; float: right;"><a href="{% url 'survey_detail' survey.id %}">Edit</a></button>
+                                    <button type="button" class="btn btn-light" style="font-family:monospace; margin-right: 10px; float: right;"><a href="{% url 'results' survey.id %}">Result</a></button>
+                                {% endif %}
 
-
+                            </div>
+                        </div>
                     </div>
-                </div>
-                </div>
                 </div>
             {% endfor %}
             </div>
+
         {% else %}
-            <h3 class="text-center font-weight-light">Unfortunately, there are no surveys available to you</h3>
+            <h3 class="text-center font-weight-light" style="font-family:monospace;">Unfortunately, there are no surveys available to you</h3>
+        {% endif %}
+    <br/><br/>
+    <div class="text-center">
+        {% if request.user.type == 's' %}
+        {% else %}
+            <div class="row justify-content-center">
+             <p><button type="button" class="btn btn-light" style="font-family:monospace; margin-right: 10px; float: right; font-size: 18px"><a href="{{% url 'survey_create' %}">Add Survey</a></button></p>
+            </div>
         {% endif %}
     </div>
-    <div class="text-center">
-         {% if request.user.type == 's' %}
-         {% else %}
-             <p><button onclick="location.href='{% url 'survey_create' %}'" type="button" class="btn btn-outline-dark" style="font-family:monospace;">Add Survey</button></p>
-         {% endif %}
 
-    </div>
 {% endblock %}
