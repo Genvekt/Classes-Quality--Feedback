@@ -1,4 +1,7 @@
-{% extends 'base.html' %}
+{% include 'base.html' %}
 {% block content %}
-    <h1>You don't have a permission</h1>
+
+        <div class="jumbotron" style="height: 1000px;">
+            <h2 class="text-center font-weight-normal" style="font-family:monospace;">Sorry, {{ user.username }}, you do not have a permission!</h2>
+        </div>
 {% endblock %}

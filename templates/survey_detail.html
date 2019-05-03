@@ -1,7 +1,7 @@
-{% extends 'base.html' %}
+{% include 'base.html' %}
 {% block content %}
     {% if survey %}
-    <div class="jumbotron jumbotron-fluid" style="background: inherit">
+    <div class="jumbotron" style="height: 1000px">
         <div class="container">
             <h2 class="text-center font-weight-normal" style="font-family:monospace;">There is the list of questions on survey "{{ survey.name }}"
                 <br/><br/>
@@ -9,33 +9,40 @@
             {% if questions %}
                   <dl>
                 {% for question in questions %}
-                        <h5 class="text-center font-weight-normal" style="font-family:monospace;">{{ question.text }} Answer Type: {{ question.answer_type }}
-                            <button type="button" class="btn btn-outline-dark p-1"><a href="{% url 'question_delete' s_id=survey.id q_id=question.id %}">Delete</a></button>
+                        <h5 class="text-center font-weight-normal" style="font-family:monospace; font-size: 18px">{{ question.text }} Answer Type: {{ question.answer_type }}
+                            <button type="button" class="btn btn-light text-center font-weight-normal" style="margin-left: 2%;"><a href="{% url 'question_delete' s_id=survey.id q_id=question.id %}">Delete</a></button>
                         </h5>
                 {% endfor %}
                       <br/>
                   </dl>
             {% else %}
-                <h3 class="text-center font-weight-light" style="font-family:monospace;">This survey has no questions yet.</h3>
+                <h3 class="text-center font-weight-light" style="font-family:monospace;">This survey has no questions yet.<br/>Please, enter questions below.</h3>
+                <br/><br/>
             {% endif %}
 
-            <form  action="{% url 'survey_detail' survey.id %}" method="post">
-                <div class="text-center">
-            {% csrf_token %}
+            <div class="container form-group">
+                <form method="post" class="form-control-lg" style="margin-left: 31%; width: 100%; font-family:monospace;" action="{% url 'survey_detail' survey.id %}">
+                    {% csrf_token %}
+                    <p>
+                        {{ form.as_p }}
+                        <button type="submit" class="btn btn-light text-center font-weight-normal" style="margin-left: 12%;">Add question</button>
+                </form>
+                <br/><br/><br/><br/><br/><br/>
+            </div>
+            <div class="row justify-content-center">
+                <br/><br/>
+                <button type="button" class="btn btn-light text-center font-weight-normal" style=""><a href="{% url 'survey_delete' survey.id %}">Delete Survey</a></button>
+                <button type="button" class="btn btn-light text-center font-weight-normal" style="margin-left: 2%;"><a href="{% url 'survey_list' %}">Back</a></button>
+            </div>
 
-            <p>{{ form.as_table}}  <button type="submit" class="btn btn-outline-dark" style="font-family:monospace;">Add question</button></p>
-                    <p><button type="button" class="btn btn-outline-dark"><a href="{% url 'survey_delete' survey.id %}">Delete Survey</a></button></p>
-            <p> <button type="button" class="btn btn-outline-dark"><a href="{% url 'survey_list' %}">Back</a></button> </p>
-                </div>
-            </form>
         </div>
     </div>
     {% else %}
-        <div class="jumbotron jumbotron-fluid">
+        <div class="jumbotron" style="height: 1000px">
             <div class="container">
                 <h2 class="text-center font-weight-normal" style="font-family:monospace;">Sorry, such survey does not exists</h2>
                 <h3 class="text-center font-weight-light" style="font-family:monospace;">Make sure you have used right page address.</h3>
-                <button type="button" class="btn btn-outline-dark" ><a href="{% url 'survey_list' %}">Back</a></button>
+                <button type="button" class="btn btn-light text-center font-weight-normal" style="margin-left: 2%;"><a href="{% url 'survey_list' %}">Back</a></button>
             </div>
         </div>
     {% endif %}

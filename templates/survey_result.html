@@ -1,7 +1,7 @@
-{% extends 'base.html' %}
+{% include 'base.html' %}
 {% block content %}
     {% if survey %}
-    <div class="jumbotron jumbotron-fluid" style="background: inherit">
+    <div class="jumbotron" style="height: 1000px">
         <div class="container">
             <h2 class="text-center font-weight-normal" style="font-family:monospace;">All answers on questions of survey "{{ survey.name }}"
             <br/><br/>
@@ -27,15 +27,15 @@
             <h3 class="text-center font-weight-light" style="font-family:monospace;">There is no submissions on this survey yet.</h3>
             {% endif %}
             <br/>
-            <button type="button" class="btn btn-outline-dark d-block mx-auto" style="font-family:monospace;"><a href="{% url 'survey_list' %}">Back</a></button>
+            <button type="button" class="btn btn-light text-center font-weight-normal" style="margin-left: 2%;"><a href="{% url 'survey_list' %}">Back</a></button>
         </div>
     </div>
 
     {% else %}
-        <div class="jumbotron jumbotron-fluid" style="background: inherit">
+        <div class="jumbotron" style="height: 1000px ">
             <div class="container">
                 <h2 class="text-center font-weight-normal" style="font-family:monospace;">Sorry, here is no such survey.</h2>
-                <button type="button" class="btn btn-outline-dark d-block mx-auto" style="font-family:monospace;"><a href="{% url 'survey_list' %}">Back</a></button>
+                <button type="button" class="btn btn-light text-center font-weight-normal" style="margin-left: 2%;"><a href="{% url 'survey_list' %}">Back</a></button>
             </div>
         </div>
     {% endif %}

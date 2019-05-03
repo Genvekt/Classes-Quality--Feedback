@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block content %}
-<div class="jumbotron jumbotron-fluid" style="background: inherit">
+<div class="jumbotron jumbotron-fluid" style="height: 1000px">
     <div class="container">
             <h2 class="text-center font-weight-normal" style="font-family:monospace;">The list of all student groups
                 <br/><br/>
@@ -11,23 +11,28 @@
                                 <div class="card-body">
                                     <p>
                                         {{ g.name }}
-                                        <button type="button" class="btn btn-outline-dark"><a href="{% url 's_group_info' g.id %}">Edit Group</a></button>
-                                        <button type="button" class="btn btn-outline-dark"><a href="{% url 's_group_delete' g.id %}">Delete Group</a></button>
+                                        <button type="button" class="btn btn-outline-danger" style="font-family:monospace; margin-right: 10px; float: right;"><a href="{% url 's_group_delete' g.id %}">Delete Group</a></button>
+                                        <button type="button" class="btn btn-light" style="font-family:monospace; margin-right: 10px; float: right;"><a href="{% url 's_group_info' g.id %}">Edit Group</a></button>
                                     </p>
                                 </div>
                             </div>
+                            <div>
+                                <br/>
+                            </div>
                 {% endfor %}
             {% else %}
-                <h3 class="text-center font-weight-light" style="font-family:monospace;">There is no student groups yet.</h3>
+                <h3 class="text-center font-weight-light" style="font-family:monospace;">There are no student groups yet.<br/>Please, add a new one.</h3>
+                <br/>
             {% endif %}
-            <form  action="{% url 's_groups_list' %}" method="post">
+            <form  class="form-control-lg" style="width: 100%; font-size: 18px; font-family:monospace;" action="{% url 's_groups_list' %}" method="post">
                 <div class="text-center">
                     {% csrf_token %}
-                    <p>{{ form.as_table}}  <button type="submit" class="btn btn-outline-dark" style="font-family:monospace;">Add group</button></p>
+                    <p>{{form}}
+                        <button type="submit" class="btn btn-light text-center font-weight-normal" style="font-family:monospace;">Add group</button>
                 </div>
             </form>
             <br/>
-            <button type="button" class="btn btn-outline-dark d-block mx-auto" style="font-family:monospace;"><a href="{% url 'survey_list' %}">Back</a></button>
-    </div>
+           <button type="button" class="btn btn-light" style="font-family:monospace; font-size: 18px; margin-left:530px"><a href="{% url 'survey_list' %}">Back</a></button>
+        </div>
 </div>
 {% endblock %}

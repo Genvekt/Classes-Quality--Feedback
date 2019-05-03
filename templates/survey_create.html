@@ -1,10 +1,15 @@
-{% extends 'base.html' %}
+{% include 'base.html' %}
 {% block content %}
+        <div class="jumbotron" style="height: 1000px;">
+            <div class="container form-group">
+                <form  class="form-control-lg" style="margin-left: 25%; width: 100%; font-family:monospace;" action="{% url 'survey_create' %}" method="post">
+                    {% csrf_token %}
 
-        <form  action="{% url 'survey_create' %}" method="post">
-            {% csrf_token %}
-
-            <p>{{ form.as_table}}  <input type="submit" value="Enter name"> </p>
-        </form>
+                    <p>{{form.as_p}}
+                        <button type="submit" class="btn btn-light text-center font-weight-normal" style="margin-left: 13%;">Enter name</button>
+                    </p>
+                </form>
+            </div>
+        </div>
 
 {% endblock %}
