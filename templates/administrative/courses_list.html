@@ -1,0 +1,42 @@
+{% include 'base.html' %}
+{% block content %}
+    <div class="jumbotron" style="height: 1000px">
+        <div class="container">
+            <h2 class="text-center font-weight-normal" style="font-family:monospace;">The list of all courses
+            <br/><br/>
+            </h2>
+
+            {% if courses %}
+
+
+            {% for c in courses %}
+                            <div class="card"  style="font-family:monospace; font-size: 18px">
+                                <div class="card-body">
+                                    <b>{{ c.title }}</b>
+                                    <button type="button" class="btn btn-outline-danger" style="font-family:monospace; margin-right: 10px; float: right;"><a href="{% url 'delete_course' c.id %}">Delete</a></button>
+                                    <button type="button" class="btn btn-light" style="font-family:monospace; margin-right: 10px; float: right;"><a href="{% url 'course_info' c.id %}">Student Groups</a></button>
+                                    <button type="button" class="btn btn-light" style="font-family:monospace; margin-right: 10px; float: right;"><a href="{% url 'course_instructors' c.id %}">Instructors</a></button>
+                                    <br/>
+                                </div>
+                            </div>
+                            <div>
+                                <br/>
+                            </div>
+                {% endfor %}
+            {% else %}
+                <h3 class="text-center font-weight-light" style="font-family:monospace;">There is no courses yet.</h3>
+            {% endif %}
+            <form  class="form-control-lg" style="margin-left: 50px; width: 100%; font-size: 20px; font-family:monospace;" action="{% url 'courses_list' %}" method="post">
+                <div class="text-center">
+                    {% csrf_token %}
+                    <p>{{ form}}
+                        <button type="submit" class="btn btn-light text-center font-weight-normal" style="font-family:monospace;">Add</button>
+                </div>
+            </form>
+            <dev>
+                <br/>
+            </dev>
+            <button type="button" class="btn btn-light" style="font-family:monospace; font-size: 18px; margin-left:500px"><a href="{% url 'survey_list' %}">Back</a></button>
+        </div>
+    </div>
+{% endblock %}
