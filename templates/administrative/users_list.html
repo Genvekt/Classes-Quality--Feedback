@@ -1,16 +1,13 @@
-{% extends 'base.html' %}
+{% include 'base.html' %}
 {% block content %}
-    <div class="jumbotron jumbotron-fluid">
+    <div class="jumbotron" style="height: 100vh">
         <div class="container">
-            <h3 class="text-center font-weight-light">
+            <h3 class="text-center font-weight-normal" style="font-family:monospace;">
                 The list of all users
-                <button type="button" onclick="location.href='{% url 'add_user' %}'" class="btn btn-outline-success" >+</button>
-            </h3>
-        </div>
-    </div>
+                <button type="button" class="btn btn-light btn-lg" style="font-family:monospace; margin-right: 10px;"><a href="{% url 'add_user' %}">+</a></button>
+                  </h3>
 
-
-     <div class="card">
+            <div class="card">
       <div class="card-header">
         <a class="card-link" data-toggle="collapse" href="#collapseZero">
           Unactive users
@@ -23,8 +20,8 @@
                             <div class="card" style="font-size: 15px">
                                 <div class="card-body">
                                     <b>{{ user.first_name}} {{ user.last_name}}</b>
-                                    <button type="button" onclick="location.href='{% url 'activate_user' user.id %}'" class="btn btn-outline-success" style="float: right;" >Activate</button>
-                                    <button type="button" onclick="location.href='{% url 'delete_user' user.id %}'" class="btn btn-outline-danger" style="float: right;" >Reject</button>
+                                    <button type="button" class="btn btn-outline-danger" style="font-family:monospace; margin-right: 10px; float: right;"><a href="{% url 'delete_user' user.id %}">Reject</a></button>
+                                    <button type="button" class="btn btn-light" style="font-family:monospace; margin-right: 10px; float: right;"><a href="{% url 'activate_user' user.id %}">Activate</a></button>
                                     <br/>
                                     Email: {{ user.email}}
                                     <br/>
@@ -63,7 +60,7 @@
                             <div class="card" style="font-size: 15px">
                                 <div class="card-body">
                                     <b>{{ user.first_name}} {{ user.last_name}}</b>
-                                    <button type="button" onclick="location.href='{% url 'delete_user' user.id %}'" class="btn btn-outline-danger" style="float: right;" >Delete</button>
+                                    <button type="button" class="btn btn-outline-danger" style="font-family:monospace; margin-right: 10px; float: right;"><a href="{% url 'delete_user' user.id %}">Delete</a></button>
                                     <br/>
                                     Email: {{ user.email}}
                                     <br/>
@@ -93,7 +90,7 @@
                             <div class="card" style="font-size: 15px">
                                 <div class="card-body">
                                     <b>{{ user.first_name}} {{ user.last_name}}</b>
-                                    <button type="button" onclick="location.href='{% url 'delete_user' user.id %}'" class="btn btn-outline-danger" style="float: right;">Delete</button>
+                                    <button type="button" class="btn btn-outline-danger" style="font-family:monospace; margin-right: 10px; float: right;"><a href="{% url 'delete_user' user.id %}">Delete</a></button>
                                     <br/>
                                     Email: {{ user.email}}
                                     <br/>
@@ -121,7 +118,7 @@
                             <div class="card" style="font-size: 15px">
                                 <div class="card-body">
                                     <b>{{ user.first_name}} {{ user.last_name}}</b>
-                                    <button type="button" onclick="location.href='{% url 'delete_user' user.id %}'" class="btn btn-outline-danger" style="float: right;"><a>Delete</a></button>
+                                    <button type="button" class="btn btn-outline-danger" style="font-family:monospace; margin-right: 10px; float: right;"><a href="{% url 'delete_user' user.id %}">Delete</a></button>
                                     <br/>
                                     Email: {{ user.email}}
                                     <br/>
@@ -139,5 +136,7 @@
 
             <button type="button" class="btn btn-outline-dark d-block mx-auto" onclick="window.location.href='{% url 'survey_list' %}'" ><a>Back</a></button>
 
+        </div>
+    </div>
 
 {% endblock %}
