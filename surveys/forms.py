@@ -7,26 +7,26 @@ from .models import USER_TYPES, ANSWER_TYPES, Courses, User, Student, Professor,
 
 
 def get_courses():
-    try:
-        res = [(course.id, course.title) for course in Courses.objects.all()]
-        return res
-    except OperationalError:
+    # try:
+    #     res = [(course.id, course.title) for course in Courses.objects.all()]
+    #     return res
+    # except OperationalError:
         return []
 
 
 def get_users(type):
-    try:
-        res = [(u.id, u.last_name + ' ' + u.first_name) for u in User.objects.filter(type=type, is_active=True).order_by('last_name')]
-        return res
-    except OperationalError:
+    # try:
+    #     res = [(u.id, u.last_name + ' ' + u.first_name) for u in User.objects.filter(type=type, is_active=True).order_by('last_name')]
+    #     return res
+    # except OperationalError:
         return []
 
 
 def get_groups():
-    try:
-        res = [(g.id, g.name) for g in StudentGroup.objects.all()]
-        return res
-    except OperationalError:
+    # try:
+    #     res = [(g.id, g.name) for g in StudentGroup.objects.all()]
+    #     return res
+    # except OperationalError:
         return []
 
 
