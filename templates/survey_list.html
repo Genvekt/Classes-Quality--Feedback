@@ -50,7 +50,7 @@
         {% if request.user.type == 's' %}
         {% else %}
             <div class="row justify-content-center">
-             <p><button type="button" class="btn btn-light" style="font-family:monospace; margin-right: 10px; float: right; font-size: 18px"><a href="{{% url 'survey_create' %}">Add Survey</a></button></p>
+             <p><button type="button" class="btn btn-light" style="font-family:monospace; margin-right: 10px; float: right; font-size: 18px"><a href="{% url 'survey_create' %}">Add Survey</a></button></p>
             </div>
         {% endif %}
     </div>
